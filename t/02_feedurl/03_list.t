@@ -41,6 +41,9 @@ Etag: "myetag"
         <link rel="self"
             type="application/atom+xml"
             href="http://example.com/myselfurl" />
+        <link rel="http://example.com/schema#myentry"
+            type="application/atom+xml"
+            href="http://example.com/myentryfeed" />
     </entry>
 </feed>
 END
@@ -50,6 +53,7 @@ END
     ok my @e = $s->myentries({title => 'query title'});
     ok scalar @e;
     isa_ok $e[0], 'MyService::MyEntry';
+    is $e[0]->child_feedurl, 'http://example.com/myentryfeed';
 }
 
 done_testing;

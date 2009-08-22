@@ -2,6 +2,8 @@ package Net::Google::GData::Role::HasContent;
 use Moose::Role;
 use namespace::clean -except => 'meta';
 
+requires 'update';
+
 has content => (
     isa => 'HashRef',
     is => 'rw',

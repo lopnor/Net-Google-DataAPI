@@ -29,6 +29,7 @@ sub feedurl {
             return $args || {};
         };
     my $from_atom = delete $args{from_atom};
+    my $rel = delete $args{rel};
 
     my $attr_name = "${name}_feedurl";
 
@@ -80,13 +81,26 @@ sub feedurl {
         }
     );
 
-    if ( $class->find_method_by_name('from_atom') && $from_atom ) {
-        $class->add_after_method_modifier(
-            'from_atom' => sub {
-                my ($self) = @_;
-                $self->{$attr_name} = $from_atom->($self->atom);
-            }
-        );
+    if ( $class->find_method_by_name('from_atom') ) {
+        if ( $rel ) {
+            $class->add_after_method_modifier(
+                'from_atom' => sub {
+                    my ($self) = @_;
+                    $self->{$attr_name} = [
+                        map { $_->href }
+                        grep { $_->rel eq $rel }
+                        $self->atom->link
+                    ]->[0];
+                }
+            );
+        } elsif ( $from_atom ) {
+            $class->add_after_method_modifier(
+                'from_atom' => sub {
+                    my ($self) = @_;
+                    $self->{$attr_name} = $from_atom->($self->atom);
+                }
+            );
+        }
     }
 }
 
