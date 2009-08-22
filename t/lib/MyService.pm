@@ -1,4 +1,5 @@
 package MyService;
+use Moose;
 use Net::Google::GData;
 with 'Net::Google::GData::Role::Service' => {
     service => 'wise',
@@ -12,7 +13,7 @@ feedurl myentry => (
 );
 
 feedurl fixed => (
-    entry_class => 'MyService::Entry',
+    entry_class => 'MyService::MyEntry',
     default => 'http://example.com/fixed',
     can_add => 0,
 );

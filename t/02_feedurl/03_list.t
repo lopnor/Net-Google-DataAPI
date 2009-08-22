@@ -44,6 +44,8 @@ Etag: "myetag"
         <link rel="http://example.com/schema#myentry"
             type="application/atom+xml"
             href="http://example.com/myentryfeed" />
+        <content type="application/atom+xml;type=feed"
+            src="http://example.com/srcofcontent" />
     </entry>
 </feed>
 END
@@ -54,6 +56,7 @@ END
     ok scalar @e;
     isa_ok $e[0], 'MyService::MyEntry';
     is $e[0]->child_feedurl, 'http://example.com/myentryfeed';
+    is $e[0]->src_child_feedurl, 'http://example.com/srcofcontent';
 }
 
 done_testing;

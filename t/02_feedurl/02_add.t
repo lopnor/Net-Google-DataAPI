@@ -44,6 +44,9 @@ Etag: "myetag"
     <link rel="self"
         type="application/atom+xml"
         href="http://example.com/myselfurl" />
+    <link rel="http://example.com/schema#myentry"
+        type="application/atom+xml"
+        href="http://example.com/myentryfeed" />
 </entry>
 END
         }
