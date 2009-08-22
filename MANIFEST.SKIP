@@ -10,10 +10,12 @@
 ^MakeMaker-\d
 \.gz$
 \.cvsignore
+\.gitignore
 ^t/9\d_.*\.t
 ^t/perlcritic
 ^tools/
 \.svn/
+\.git/
 ^[^/]+\.yaml$
 ^[^/]+\.pl$
 ^\.shipit$
