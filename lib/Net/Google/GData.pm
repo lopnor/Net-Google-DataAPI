@@ -54,11 +54,22 @@ sub feedurl {
                 $self->$attr_name or return;
                 Class::MOP::load_class($entry_class);
                 $args = $arg_builder->($self, $args);
-                my $entry = $entry_class->new($args)->to_atom;
+                my %parent = (
+                    $class->does_role('Net::Google::GData::Role::Entry') ?
+                    ( container => $self ) :
+                    $class->does_role('Net::Google::GData::Role::Service') ?
+                    ( service => $self ) : (),
+                );
+                my $entry = $entry_class->new(
+                    {
+                        %parent,
+                        %$args
+                    }
+                )->to_atom;
                 my $atom = $self->service->post($self->$attr_name, $entry);
-                $self->sync;
+                $self->sync if $class->does_role('Net::Google::GData::Role::Entry');
                 return $entry_class->new(
-                    container => $self,
+                    %parent,
                     atom => $atom,
                 );
             }
@@ -74,7 +85,10 @@ sub feedurl {
             my $feed = $self->service->get_feed($self->$attr_name, $cond);
             return map {
                 $entry_class->new(
-                    container => $self,
+                    $class->does_role('Net::Google::GData::Role::Entry') ?
+                    ( container => $self ) :
+                    $class->does_role('Net::Google::GData::Role::Service') ?
+                    ( service => $self ) : (),
                     atom => $_,
                 )
             } $feed->entries;

@@ -47,6 +47,8 @@ Etag: "myetag"
     <link rel="http://example.com/schema#myentry"
         type="application/atom+xml"
         href="http://example.com/myentryfeed" />
+    <content type="application/atom+xml;type=feed"
+        src="http://example.com/srcofcontent" />
 </entry>
 END
         }

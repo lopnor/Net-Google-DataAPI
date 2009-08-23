@@ -5,7 +5,7 @@ with 'Net::Google::GData::Role::Service' => {
     service => 'wise',
     source => __PACKAGE__,
 };
-with 'Net::Google::GData::Role::Entry';
+#with 'Net::Google::GData::Role::Entry';
 
 feedurl myentry => (
     entry_class => 'MyService::MyEntry',

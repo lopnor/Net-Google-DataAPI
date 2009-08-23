@@ -43,6 +43,14 @@ role {
         required => 1,
         lazy_build => 1,
     );
+    
+    has service => (
+        does => 'Net::Google::GData::Role::Service',
+        is => 'ro',
+        required => 1,
+        lazy_build => 1,
+        weak_ref => 1,
+    );
 
     method ns => sub {
         my ($self, $name) = @_;
@@ -192,7 +200,7 @@ role {
                 header => {'If-Match' => $args->{self}->etag},
             }
         );
-        return $res->is_success;
+        return $res;
     };
 };
 
