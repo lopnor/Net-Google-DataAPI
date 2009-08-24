@@ -3,13 +3,13 @@ use warnings;
 use Test::More;
 
 BEGIN {
-    use_ok('Net::Google::GData::Role::HasContent');
+    use_ok('Net::Google::DataAPI::Role::HasContent');
 }
 
 {
     package Foo;
     use Moose;
-    with 'Net::Google::GData::Role::HasContent';
+    with 'Net::Google::DataAPI::Role::HasContent';
 
     sub update { }
 }

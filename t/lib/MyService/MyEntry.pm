@@ -1,7 +1,7 @@
 package MyService::MyEntry;
 use Moose;
-use Net::Google::GData;
-with 'Net::Google::GData::Role::Entry';
+use Net::Google::DataAPI;
+with 'Net::Google::DataAPI::Role::Entry';
 
 feedurl child => (
     entry_class => 'MyService::MyEntry',

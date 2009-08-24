@@ -1,4 +1,4 @@
-package Net::Google::GData::Role::Service;
+package Net::Google::DataAPI::Role::Service;
 use MooseX::Role::Parameterized;
 
 use Carp;
@@ -45,7 +45,7 @@ role {
     );
     
     has service => (
-        does => 'Net::Google::GData::Role::Service',
+        does => 'Net::Google::DataAPI::Role::Service',
         is => 'ro',
         required => 1,
         lazy_build => 1,

@@ -4,13 +4,13 @@ use Test::More;
 use t::Util;
 
 BEGIN {
-    use_ok 'Net::Google::GData::Role::Entry';
+    use_ok 'Net::Google::DataAPI::Role::Entry';
 }
 
 {
     package MyService;
     use Moose;
-    with 'Net::Google::GData::Role::Service' => {
+    with 'Net::Google::DataAPI::Role::Service' => {
         service => 'wise',
         source => __PACKAGE__,
     };
@@ -18,7 +18,7 @@ BEGIN {
 {
     package MyEntry;
     use Moose;
-    with 'Net::Google::GData::Role::Entry';
+    with 'Net::Google::DataAPI::Role::Entry';
 }
 
 my $s = MyService->new(

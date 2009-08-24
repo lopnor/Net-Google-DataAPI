@@ -1,4 +1,4 @@
-package Net::Google::GData::Role::Entry;
+package Net::Google::DataAPI::Role::Entry;
 use Moose::Role;
 use namespace::clean -except => 'meta';
 use Carp;
@@ -6,12 +6,12 @@ use XML::Atom;
 use XML::Atom::Entry;
 
 has container => (
-    isa => 'Maybe[Net::Google::GData::Role::Entry]',
+    isa => 'Maybe[Net::Google::DataAPI::Role::Entry]',
     is => 'ro',
 );
 
 has service => (
-    does => 'Net::Google::GData::Role::Service',
+    does => 'Net::Google::DataAPI::Role::Service',
     is => 'ro',
     required => 1,
     lazy_build => 1,

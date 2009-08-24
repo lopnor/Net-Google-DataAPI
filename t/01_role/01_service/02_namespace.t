@@ -5,13 +5,13 @@ use Test::MockObject;
 use Test::MockModule;
 
 BEGIN {
-    use_ok 'Net::Google::GData::Role::Service';
+    use_ok 'Net::Google::DataAPI::Role::Service';
 }
 
 {
     package MyService;
     use Moose;
-    with 'Net::Google::GData::Role::Service' => {
+    with 'Net::Google::DataAPI::Role::Service' => {
         service => 'wise',
         source => __PACKAGE__,
         ns => {

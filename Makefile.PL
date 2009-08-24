@@ -1,6 +1,6 @@
 use inc::Module::Install;
-name 'Net-Google-GData';
-all_from 'lib/Net/Google/GData.pm';
+name 'Net-Google-DataAPI';
+all_from 'lib/Net/Google/DataAPI.pm';
 
 requires 'Carp';
 requires 'XML::Atom';

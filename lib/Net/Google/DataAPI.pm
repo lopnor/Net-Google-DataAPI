@@ -1,4 +1,4 @@
-package Net::Google::GData;
+package Net::Google::DataAPI;
 use 5.008001;
 use Moose ();
 use Moose::Exporter;
@@ -55,9 +55,9 @@ sub feedurl {
                 Class::MOP::load_class($entry_class);
                 $args = $arg_builder->($self, $args);
                 my %parent = (
-                    $class->does_role('Net::Google::GData::Role::Entry') ?
+                    $class->does_role('Net::Google::DataAPI::Role::Entry') ?
                     ( container => $self ) :
-                    $class->does_role('Net::Google::GData::Role::Service') ?
+                    $class->does_role('Net::Google::DataAPI::Role::Service') ?
                     ( service => $self ) : (),
                 );
                 my $entry = $entry_class->new(
@@ -67,7 +67,7 @@ sub feedurl {
                     }
                 )->to_atom;
                 my $atom = $self->service->post($self->$attr_name, $entry);
-                $self->sync if $class->does_role('Net::Google::GData::Role::Entry');
+                $self->sync if $class->does_role('Net::Google::DataAPI::Role::Entry');
                 return $entry_class->new(
                     %parent,
                     atom => $atom,
@@ -85,9 +85,9 @@ sub feedurl {
             my $feed = $self->service->get_feed($self->$attr_name, $cond);
             return map {
                 $entry_class->new(
-                    $class->does_role('Net::Google::GData::Role::Entry') ?
+                    $class->does_role('Net::Google::DataAPI::Role::Entry') ?
                     ( container => $self ) :
-                    $class->does_role('Net::Google::GData::Role::Service') ?
+                    $class->does_role('Net::Google::DataAPI::Role::Service') ?
                     ( service => $self ) : (),
                     atom => $_,
                 )
@@ -126,15 +126,15 @@ __END__
 
 =head1 NAME
 
-Net::Google::GData -
+Net::Google::DataAPI -
 
 =head1 SYNOPSIS
 
-  use Net::Google::GData;
+  use Net::Google::DataAPI;
 
 =head1 DESCRIPTION
 
-Net::Google::GData is
+Net::Google::DataAPI is
 
 =head1 AUTHOR
 

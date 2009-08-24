@@ -1,4 +1,4 @@
-package Net::Google::GData::Role::HasContent;
+package Net::Google::DataAPI::Role::HasContent;
 use Moose::Role;
 use namespace::clean -except => 'meta';
 

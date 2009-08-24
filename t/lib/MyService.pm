@@ -1,11 +1,10 @@
 package MyService;
 use Moose;
-use Net::Google::GData;
-with 'Net::Google::GData::Role::Service' => {
+use Net::Google::DataAPI;
+with 'Net::Google::DataAPI::Role::Service' => {
     service => 'wise',
     source => __PACKAGE__,
 };
-#with 'Net::Google::GData::Role::Entry';
 
 feedurl myentry => (
     entry_class => 'MyService::MyEntry',
