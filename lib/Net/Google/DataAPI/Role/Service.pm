@@ -71,7 +71,7 @@ role {
             $self->username,
             $self->password,
         );
-        unless ($res && $res->is_success) {
+        unless ($res->is_success) {
             croak 'Net::Google::AuthSub login failed';
         } 
         my $ua = LWP::UserAgent->new(
@@ -98,7 +98,7 @@ role {
     method request => sub {
         my ($self, $args) = @_;
         my $method = delete $args->{method};
-        $method ||= $args->{content} ? 'POST' : 'GET';
+        $method = $args->{content} ? 'POST' : 'GET' unless $method;
         my $uri = URI->new($args->{'uri'});
         $uri->query_form($args->{query}) if $args->{query};
         my $req = HTTP::Request->new($method => "$uri");
@@ -110,7 +110,7 @@ role {
             }
         }
         my $res = eval {$self->ua->request($req)};
-        if ($ENV{GOOGLE_DATAAPI_DEBUG}) {
+        if ($ENV{GOOGLE_DATAAPI_DEBUG} && $res) {
             warn $res->request ? $res->request->as_string : $req->as_string;
             warn $res->as_string;
         }
@@ -118,8 +118,8 @@ role {
             croak sprintf(
                 "request for '%s' failed:\n\t%s\n\t%s\n\t", 
                 $uri, 
-                $@ || $res->status_line,
-                $! || $res->content
+                ($res ? $res->status_line : $@),
+                ($res ? $res->content : $!),
             );
         }
         my $type = $res->content_type;
@@ -147,7 +147,7 @@ role {
         return $self->request(
             {
                 uri => $url,
-                query => $query || undef,
+                query => $query,
                 response_object => 'XML::Atom::Feed',
             }
         );
@@ -158,7 +158,6 @@ role {
         return $self->request(
             {
                 uri => $url,
-                query => $query || undef,
                 response_object => 'XML::Atom::Entry',
             }
         );
@@ -170,7 +169,6 @@ role {
             {
                 uri => $url,
                 content => $entry->as_xml,
-                header => $header || undef,
                 content_type => 'application/atom+xml',
                 response_object => ref $entry,
             }

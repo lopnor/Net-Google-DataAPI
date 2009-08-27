@@ -3,6 +3,7 @@ use warnings;
 use Test::More;
 use Test::MockObject;
 use Test::MockModule;
+use Test::Exception;
 
 BEGIN {
     use_ok 'Net::Google::DataAPI::Role::Service';
@@ -43,6 +44,9 @@ BEGIN {
         isa_ok $gs, 'XML::Atom::Namespace';
         is $gs->{prefix}, 'gs';
         is $gs->{uri}, 'http://schemas.google.com/spreadsheets/2006';
+    }
+    {
+        throws_ok { $service->ns('foobar') } qr{Namespace 'foobar' is not defined!};
     }
 }
 

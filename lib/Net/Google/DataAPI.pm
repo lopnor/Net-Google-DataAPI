@@ -3,7 +3,7 @@ use 5.008001;
 use Moose ();
 use Moose::Exporter;
 use Carp;
-use Lingua::EN::Inflect::Number qw(to_PL);
+use Lingua::EN::Inflect::Number qw(to_PL to_S);
 our $VERSION = '0.02';
 
 Moose::Exporter->setup_import_methods(
@@ -46,6 +46,7 @@ sub feedurl {
             %args,
         )
     );
+    my $pl_name = to_PL($name);
 
     if ($can_add) {
         $class->add_method(
@@ -76,7 +77,6 @@ sub feedurl {
             }
         );
     }
-    my $pl_name = to_PL($name);
     $class->add_method(
         $pl_name => sub {
             my ($self, $cond) = @_;

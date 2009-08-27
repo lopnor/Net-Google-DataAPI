@@ -14,7 +14,7 @@ has content => (
 sub param {
     my ($self, $arg) = @_;
     return $self->content unless $arg;
-    if (ref $arg && (ref $arg eq 'HASH')) {
+    if (ref $arg eq 'HASH') {
         return $self->content(
             {
                 %{$self->content},

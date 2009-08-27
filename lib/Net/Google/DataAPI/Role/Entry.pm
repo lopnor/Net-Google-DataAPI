@@ -75,13 +75,12 @@ sub to_atom {
     my ($self) = @_;
     $XML::Atom::DefaultVersion = 1;
     my $entry = XML::Atom::Entry->new;
-    $entry->title($self->title) if $self->title;
+    $entry->title($self->title);
     return $entry;
 }
 
 sub sync {
     my ($self) = @_;
-    $self->selfurl or return;
     my $entry = $self->service->get_entry($self->selfurl);
     $self->atom($entry);
 }
@@ -95,14 +94,14 @@ sub update {
             entry => $self->to_atom,
         }
     );
-    $self->container->sync if ($atom && $self->container);
+    $self->container->sync if $self->container;
     $self->atom($atom);
 }
 
 sub delete {
     my $self = shift;
     my $res = $self->service->delete({self => $self});
-    $self->container->sync if ($res->is_success && $self->container);
+    $self->container->sync if $self->container;
     return $res->is_success;
 }
 
