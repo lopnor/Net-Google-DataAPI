@@ -68,10 +68,11 @@ sub feedurl {
                 )->to_atom;
                 my $atom = $self->service->post($self->$attr_name, $entry);
                 $self->sync if $class->does_role('Net::Google::DataAPI::Role::Entry');
-                return $entry_class->new(
+                my $e = $entry_class->new(
                     %parent,
                     atom => $atom,
                 );
+                return $e;
             }
         );
     }

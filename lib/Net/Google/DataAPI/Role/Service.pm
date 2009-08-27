@@ -21,6 +21,7 @@ parameter source => (
 
 parameter ns => (
     isa => 'HashRef',
+    default => sub { +{} },
 );
 
 role {
@@ -49,7 +50,6 @@ role {
         is => 'ro',
         required => 1,
         lazy_build => 1,
-        weak_ref => 1,
     );
 
     method ns => sub {
@@ -110,8 +110,8 @@ role {
             }
         }
         my $res = eval {$self->ua->request($req)};
-        if ($ENV{DEBUG}) {
-            warn $res->request->as_string;
+        if ($ENV{GOOGLE_DATAAPI_DEBUG}) {
+            warn $res->request ? $res->request->as_string : $req->as_string;
             warn $res->as_string;
         }
         if ($@ || !$res->is_success) {

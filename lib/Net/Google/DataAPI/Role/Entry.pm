@@ -16,6 +16,7 @@ has service => (
     required => 1,
     lazy_build => 1,
     weak_ref => 1,
+    handles => ['ns'],
 );
 
 sub _build_service { shift->container->service };
@@ -63,7 +64,7 @@ sub from_atom {
     my ($self) = @_;
     $self->{title} = $self->atom->title;
     $self->{id} = $self->atom->get($self->atom->ns, 'id');
-    $self->etag($self->elem->getAttributeNS($self->service->ns('gd')->{uri}, 'etag'));
+    $self->etag($self->elem->getAttributeNS($self->ns('gd')->{uri}, 'etag'));
     for ($self->atom->link) {
         my $label = $rel2label{$_->rel} or next;
         $self->{$label} = $_->href;
