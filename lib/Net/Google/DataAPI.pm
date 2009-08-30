@@ -3,7 +3,7 @@ use 5.008001;
 use Moose ();
 use Moose::Exporter;
 use Carp;
-use Lingua::EN::Inflect::Number qw(to_PL to_S);
+use Lingua::EN::Inflect::Number qw(to_PL);
 our $VERSION = '0.02';
 
 Moose::Exporter->setup_import_methods(
