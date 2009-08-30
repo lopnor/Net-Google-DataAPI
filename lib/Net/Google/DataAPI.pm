@@ -14,9 +14,14 @@ sub feedurl {
     my ($caller, $name, %args) = @_;
 
     my $class = Class::MOP::class_of($caller);
+    $class->does_role('Net::Google::DataAPI::Role::Entry') 
+        or $class->does_role('Net::Google::DataAPI::Role::Service')
+        or confess 'Net::Google::DataAPI::Role::(Service|Entry) required to use feedurl';
 
     my $entry_class = delete $args{entry_class} 
-        or croak 'entry_class not specified';
+        or confess 'entry_class not specified';
+    Class::MOP::load_class($entry_class)->does_role('Net::Google::DataAPI::Role::Entry')
+        or confess "$entry_class should do Net::Google::DataAPI::Role::Entry role";
 
     my $can_add = delete $args{can_add};
     $can_add = 1 unless defined $can_add;
@@ -52,15 +57,12 @@ sub feedurl {
         $class->add_method(
             "add_$name" => sub {
                 my ($self, $args) = @_;
-                $self->$attr_name or return;
+                $self->$attr_name or confess "$attr_name is not set";
                 Class::MOP::load_class($entry_class);
                 $args = $arg_builder->($self, $args);
-                my %parent = (
+                my %parent = 
                     $class->does_role('Net::Google::DataAPI::Role::Entry') ?
-                    ( container => $self ) :
-                    $class->does_role('Net::Google::DataAPI::Role::Service') ?
-                    ( service => $self ) : (),
-                );
+                    ( container => $self ) : ( service => $self );
                 my $entry = $entry_class->new(
                     {
                         %parent,
@@ -80,16 +82,14 @@ sub feedurl {
     $class->add_method(
         $pl_name => sub {
             my ($self, $cond) = @_;
-            $self->$attr_name or return;
+            $self->$attr_name or confess "$attr_name is not set";
             Class::MOP::load_class($entry_class);
             $cond = $query_builder->($self, $cond);
             my $feed = $self->service->get_feed($self->$attr_name, $cond);
             return map {
                 $entry_class->new(
                     $class->does_role('Net::Google::DataAPI::Role::Entry') ?
-                    ( container => $self ) :
-                    $class->does_role('Net::Google::DataAPI::Role::Service') ?
-                    ( service => $self ) : (),
+                    ( container => $self ) : ( service => $self ),
                     atom => $_,
                 )
             } $feed->entries;

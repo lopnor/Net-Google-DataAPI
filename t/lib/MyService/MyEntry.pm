@@ -11,12 +11,30 @@ feedurl child => (
 feedurl src_child => (
     entry_class => 'MyService::MyEntry',
     as_content_src => 1,
+    query_builder => sub {
+        my ($self, $args) = @_;
+        return {
+            foobar => $args || '',
+        }
+    },
     arg_builder => sub {
         my ($self, $args) = @_;
         return {
             foobar => $args || '',
         }
     }
+);
+
+feedurl atom_child => (
+    entry_class => 'MyService::MyEntry',
+    from_atom => sub {
+        my $atom = shift;
+        return $atom->id;
+    }
+);
+
+feedurl null_child => (
+    entry_class => 'MyService::MyEntry',
 );
 
 has foobar => (

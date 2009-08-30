@@ -7,23 +7,6 @@ use HTTP::Response;
 use t::Util;
 
 {
-    package MyService;
-    use Moose;
-    use Net::Google::DataAPI;
-    with 'Net::Google::DataAPI::Role::Service' => {
-        service => 'wise',
-        source => __PACKAGE__,
-        ns => {
-            foobar => 'http://example.com/schema#foobar'
-        }
-    };
-
-    feedurl myentry => (
-        default => 'http://example.com/myfeed',
-        entry_class => 'MyEntry',
-    );
-}
-{
     package MyEntry;
     use Moose;
     use Net::Google::DataAPI;
@@ -52,6 +35,23 @@ use t::Util;
         my ($self) = @_;
         $self->{myattr} = textValue($self->elem, $self->ns('foobar')->{uri}, 'myattr');
     }
+}
+{
+    package MyService;
+    use Moose;
+    use Net::Google::DataAPI;
+    with 'Net::Google::DataAPI::Role::Service' => {
+        service => 'wise',
+        source => __PACKAGE__,
+        ns => {
+            foobar => 'http://example.com/schema#foobar'
+        }
+    };
+
+    feedurl myentry => (
+        default => 'http://example.com/myfeed',
+        entry_class => 'MyEntry',
+    );
 }
 
 my $e;

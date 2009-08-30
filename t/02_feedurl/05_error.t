@@ -3,6 +3,7 @@ use warnings;
 use t::Util;
 use Test::More;
 use Test::Exception;
+use Test::MockModule;
 
 throws_ok {
     package MyService;
@@ -17,5 +18,65 @@ throws_ok {
 
     );
 } qr{entry_class not specified};
+
+{
+    {
+        package MyEntry;
+        use Moose;
+        with 'Net::Google::DataAPI::Role::Entry';
+    }
+    {
+        package MyService;
+        use Moose;
+        use Net::Google::DataAPI;
+        with 'Net::Google::DataAPI::Role::Service' => {
+            service => 'wise',
+            source => __PACKAGE__
+        };
+
+        feedurl 'myentry' => (
+            entry_class => 'MyEntry',
+            # should have default or something
+        );
+    }
+    my $s = MyService->new(
+        username => 'example@gmail.com',
+        password => 'foobar',
+    );
+    throws_ok {$s->add_myentry} qr{myentry_feedurl is not set};
+    throws_ok {$s->myentry} qr{myentry_feedurl is not set};
+} 
+
+throws_ok {
+    {
+        package Foo;
+        use Moose;
+        use Net::Google::DataAPI;
+
+        feedurl 'bar' => (
+            entry_class => 'Bar',
+        );
+    }
+} qr{Net::Google::DataAPI::Role::\(Service|Entry\) required to use feedurl};
+
+throws_ok {
+    {
+        package MyService;
+        use Moose;
+        use Net::Google::DataAPI;
+        with 'Net::Google::DataAPI::Role::Service' => {
+            service => 'wise',
+            source => __PACKAGE__
+        };
+
+        feedurl 'foo' => (
+            entry_class => 'Foo',
+            default => 'http://example.com/bar',
+        );
+    }
+    {
+        package Foo;
+    }
+} qr{Foo should do Net::Google::DataAPI::Role::Entry role};
 
 done_testing;

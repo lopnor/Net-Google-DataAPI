@@ -6,10 +6,7 @@ use Test::More;
 use Test::MockModule;
 use Test::MockObject;
 use XML::Atom::Entry;
-
-BEGIN {
-    use_ok 'MyService';
-}
+use MyService;
 
 ok my $s = MyService->new(
     username => 'example@gmail.com',
@@ -17,8 +14,8 @@ ok my $s = MyService->new(
 );
 isa_ok $s, 'MyService';
 
+my $ua = Test::MockModule->new('LWP::UserAgent');
 {
-    my $ua = Test::MockModule->new('LWP::UserAgent');
     $ua->mock(request => sub {
             my($self, $request, $arg, $size, $previous) = @_;
             is $request->method, 'GET';
@@ -58,16 +55,54 @@ END
         isa_ok $e[0], 'MyService::MyEntry';
         is $e[0]->child_feedurl, 'http://example.com/myentryfeed';
         is $e[0]->src_child_feedurl, 'http://example.com/srcofcontent';
+        is $e[0]->atom_child_feedurl, 'http://example.com/myidurl';
+        is $e[0]->null_child_feedurl, undef;
     }
     {
         ok my $e = $s->myentry({title => 'query title'});
         isa_ok $e, 'MyService::MyEntry';
         is $e->child_feedurl, 'http://example.com/myentryfeed';
         is $e->src_child_feedurl, 'http://example.com/srcofcontent';
+        is $e->atom_child_feedurl, 'http://example.com/myidurl';
+        is $e->null_child_feedurl, undef;
+        {
+            $ua->mock(request => sub {
+                    my ($self, $request) = @_;
+                    is $request->method, 'GET';
+                    is $request->uri, 'http://example.com/srcofcontent?foobar=hoge';
+                    return HTTP::Response->parse(<<'END');
+200 OK
+Content-Type: application/atom+xml; charset=UTF-8 type=feed
+
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3c.org/2005/Atom'
+    xmlns:gd='http://schemas.google.com/g/2005' >
+    <entry gd:etag='&quot;hogeetag&quot;'>
+        <id>http://example.com/myidurl</id>
+        <title type="text">my hoge title</title>
+        <link rel="edit"
+            type="application/atom+xml"
+            href="http://example.com/myediturl" />
+        <link rel="self"
+            type="application/atom+xml"
+            href="http://example.com/myselfurl" />
+        <link rel="http://example.com/schema#myentry"
+            type="application/atom+xml"
+            href="http://example.com/myentryfeed" />
+        <content type="application/atom+xml;type=feed"
+            src="http://example.com/srcofcontent2" />
+        <foobar>hoge</foobar>
+    </entry>
+</feed>
+END
+                }
+            );
+            my $c = $e->src_child('hoge');
+            is $c->foobar, 'hoge';
+        }
     }
 }
 {
-    my $ua = Test::MockModule->new('LWP::UserAgent');
     $ua->mock(request => sub {
             my($self, $request, $arg, $size, $previous) = @_;
             is $request->method, 'GET';
@@ -82,7 +117,7 @@ Etag: "myetag"
     xmlns:gd='http://schemas.google.com/g/2005'
     gd:etag='&quot;myetag&quot;'>
     <entry gd:etag='&quot;entry2etag&quot;'>
-        <id>http://example.com/myidurl</id>
+        <id>http://example.com/myidurl2</id>
         <title type="text">my 2 title</title>
         <link rel="edit"
             type="application/atom+xml"
@@ -122,6 +157,8 @@ END
         isa_ok $e[0], 'MyService::MyEntry';
         is $e[0]->child_feedurl, 'http://example.com/myentryfeed2';
         is $e[0]->src_child_feedurl, 'http://example.com/srcofcontent2';
+        is $e[0]->atom_child_feedurl, 'http://example.com/myidurl2';
+        is $e[0]->null_child_feedurl, undef;
         is $e[0]->title, 'my 2 title';
     }
     {
@@ -129,6 +166,8 @@ END
         isa_ok $e, 'MyService::MyEntry';
         is $e->child_feedurl, 'http://example.com/myentryfeed2';
         is $e->src_child_feedurl, 'http://example.com/srcofcontent2';
+        is $e->atom_child_feedurl, 'http://example.com/myidurl2';
+        is $e->null_child_feedurl, undef;
         is $e->title, 'my 2 title';
     }
 }
