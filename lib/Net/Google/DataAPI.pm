@@ -127,21 +127,51 @@ __END__
 
 =head1 NAME
 
-Net::Google::DataAPI -
+Net::Google::DataAPI - Base implementations for modules to negotiate with Google Data APIs
 
 =head1 SYNOPSIS
 
+  package MyService;
+  use Moose;
   use Net::Google::DataAPI;
+
+  with 'Net::Google::DataAPI::Role::Service' => {
+      service => 'foobar', 
+        # see http://code.google.com/intl/ja/apis/gdata/faq.html#clientlogin
+      source => __PACKAGE__,
+        # source name to pass to Net::Google::AuthSub
+      ns => {
+          foobar => 'http://example.com/schema#foobar',
+      }
+        # registering xmlns
+  };
+
+  feedurl myentry => (
+      entry_class => 'MyEntry',
+      default => 'http://example.com/myfeed',
+  );
+
+  1;
+
+
+  package MyEntry;
+  use Moose;
 
 =head1 DESCRIPTION
 
-Net::Google::DataAPI is
+Net::Google::DataAPI is base implementations for modules to negotiate with Google Data APIs. 
 
 =head1 AUTHOR
 
 Nobuo Danjou E<lt>nobuo.danjou@gmail.comE<gt>
 
 =head1 SEE ALSO
+
+L<Net::Google::AuthSub>
+
+L<Net::Google::DataAPI::Role::Service>
+
+L<Net::Google::DataAPI::Role::Entry>
 
 =head1 LICENSE
 

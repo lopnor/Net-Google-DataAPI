@@ -27,3 +27,26 @@ sub param {
 }
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Net::Google::DataAPI::Role::HasContent - 
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 AUTHOR
+
+Nobuo Danjou E<lt>nobuo.danjou@gmail.comE<gt>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut

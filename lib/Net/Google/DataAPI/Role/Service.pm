@@ -204,3 +204,25 @@ role {
 };
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Net::Google::DataAPI::Role::Service - Represents Google Data API service 
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 SEE ALSO
+
+L<Net::Google::AuthSub>
+
+L<Net::Google::DataAPI>
+
+=head1 AUTHOR
+
+=cut
