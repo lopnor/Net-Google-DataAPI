@@ -14,6 +14,7 @@ ok my $s = MyService->new(
 );
 
 isa_ok $s, 'MyService';
+ok $s->can('ns');
 ok $s->can('add_myentry');
 ok $s->can('myentry');
 ok $s->can('myentries');

@@ -7,7 +7,7 @@ use Lingua::EN::Inflect::Number qw(to_PL);
 our $VERSION = '0.02';
 
 Moose::Exporter->setup_import_methods(
-    with_caller => ['feedurl'],
+    with_caller => ['feedurl', 'entry_has'],
 );
 
 sub feedurl {
@@ -117,6 +117,45 @@ sub feedurl {
                         $self->atom->content->elem->getAttribute('src') :
                     $from_atom ?
                         $from_atom->($self->atom) : undef;
+            }
+        );
+    }
+}
+
+sub entry_has {
+    my ($caller, $name, %args) = @_;
+
+    my $class = Class::MOP::class_of($caller);
+    $class->does_role('Net::Google::DataAPI::Role::Entry') 
+        or confess 'Net::Google::DataAPI::Role::Entry required to use entry_has';
+
+    my $from_atom = delete $args{from_atom};
+    my $to_atom = delete $args{to_atom};
+
+    $class->add_attribute(
+        $name => (
+            isa => 'Str',
+            is => 'ro',
+            $to_atom ? 
+                (trigger => sub {$_[0]->update }) : (),
+            %args,
+        )
+    );
+    if ($to_atom) {
+        $class->add_around_method_modifier(
+            to_atom => sub {
+                my ($next, $self) = @_;
+                my $entry = $next->($self);
+                $to_atom->($self, $entry) if $self->$name;
+                return $entry;
+            }
+        );
+    }
+    if ($from_atom) {
+        $class->add_after_method_modifier(
+            from_atom => sub {
+                my $self = shift;
+                $self->{$name} = $from_atom->($self, $self->atom);
             }
         );
     }

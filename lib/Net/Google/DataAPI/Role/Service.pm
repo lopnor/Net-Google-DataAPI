@@ -27,7 +27,6 @@ parameter ns => (
 role {
     my $p = shift;
 
-
     has username => ( isa => 'Str', is => 'ro', required => 1 );
     has password => ( isa => 'Str', is => 'ro', required => 1 );
 
@@ -57,7 +56,7 @@ role {
 
         return XML::Atom::Namespace->new('gd', 'http://schemas.google.com/g/2005')
             if $name eq 'gd';
-        $p->ns->{$name} or croak "Namespace '$name' is not defined!";
+        $p->ns->{$name} or confess "Namespace '$name' is not defined!";
         return XML::Atom::Namespace->new($name, $p->ns->{$name});
     };
 
@@ -72,7 +71,7 @@ role {
             $self->password,
         );
         unless ($res->is_success) {
-            croak 'Net::Google::AuthSub login failed';
+            confess 'Net::Google::AuthSub login failed';
         } 
         my $ua = LWP::UserAgent->new(
             agent => $p->source,
@@ -115,7 +114,7 @@ role {
             warn $res->as_string;
         }
         if ($@ || !$res->is_success) {
-            croak sprintf(
+            confess sprintf(
                 "request for '%s' failed:\n\t%s\n\t%s\n\t", 
                 $uri, 
                 ($res ? $res->status_line : $@),
@@ -124,7 +123,7 @@ role {
         }
         my $type = $res->content_type;
         if ($res->content_length && $type !~ m{^application/atom\+xml}) {
-            croak sprintf(
+            confess sprintf(
                 "Content-Type of response for '%s' is not 'application/atom+xml':  %s",
                 $uri, 
                 $type
@@ -132,7 +131,7 @@ role {
         }
         if (my $res_obj = $args->{response_object}) {
             my $obj = eval {$res_obj->new(\($res->content))};
-            croak sprintf(
+            confess sprintf(
                 "response for '%s' is broken: %s", 
                 $uri, 
                 $@

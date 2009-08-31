@@ -37,22 +37,18 @@ feedurl null_child => (
     entry_class => 'MyService::MyEntry',
 );
 
-has foobar => (
+entry_has foobar => (
     is => 'rw',
     isa => 'Str',
+    from_atom => sub {
+        my ($self, $atom) = @_;
+        return $atom->get($atom->ns, 'foobar');
+    },
+    to_atom => sub {
+        my ($self, $atom) = @_;
+        $atom->set($atom->ns, 'foobar', $self->foobar) if $self->foobar;
+    },
 );
-
-after from_atom => sub {
-    my ($self) = @_;
-    $self->{foobar} = $self->atom->get($self->atom->ns, 'foobar');
-};
-
-around to_atom => sub {
-    my ($next, $self) = @_;
-    my $atom = $next->($self);
-    $atom->set($atom->ns, 'foobar', $self->foobar || '');
-    return $atom;
-};
 
 __PACKAGE__->meta->make_immutable;
 
