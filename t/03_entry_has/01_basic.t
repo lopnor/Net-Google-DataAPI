@@ -98,14 +98,8 @@ END
         entry_has foobar => (
             isa => 'Str',
             is => 'rw',
-            from_atom => sub {
-                my ($self, $atom) = @_;
-                return $atom->get($self->ns('hoge'), 'foobar')
-            },
-            to_atom => sub {
-                my ($self, $atom) = @_;
-                $atom->set($self->ns('hoge'), 'foobar', $self->foobar);
-            },
+            ns => 'hoge',
+            tagname => 'foobar',
         );
     }
     {
@@ -153,7 +147,7 @@ END
             is => 'rw',
             from_atom => sub {
                 my ($self, $atom) = @_;
-                return $atom->get($self->ns('hoge'), 'foobar')
+                return $atom->get($self->ns('hoge'), 'foobar');
             },
             to_atom => sub {
                 my ($self, $atom) = @_;
@@ -193,4 +187,52 @@ END
     is $e->foobar, 'nyoro';
     is $e->etag, '"entryetag2"';
 }
+
+{
+    {
+        package MyEntry4;
+        use Moose;
+        use Net::Google::DataAPI;
+        with 'Net::Google::DataAPI::Role::Entry';
+
+        entry_has foobar => (
+            isa => 'Str',
+            is => 'rw',
+            ns => 'hoge',
+            tagname => 'foobar',
+        );
+    }
+    {
+        package MyService4;
+        use Moose;
+        use Net::Google::DataAPI;
+        with 'Net::Google::DataAPI::Role::Service' => {
+            service => 'wise',
+            source => __PACKAGE__,
+            ns => {
+                hoge => 'http://example.com/schema#hoge',
+            },
+        };
+
+        feedurl myentry => (
+            entry_class => 'MyEntry4',
+            default => 'http://example.com/myentry',
+        );
+    }
+
+    $ua->mock(request => sub {$feed_res});
+    ok my $e = MyService4->new(
+        username => 'example@gmail.com',
+        password => 'foobar',
+    )->myentry;
+    isa_ok $e, 'MyEntry4';
+    is $e->foobar, 'piyo', 'getter with from_atom';
+
+    $ua->mock(request => sub {$entry_res});
+    is $e->etag, '"entryetag"';
+    is $e->foobar('nyoro'), 'nyoro';
+    is $e->foobar, 'nyoro';
+    is $e->etag, '"entryetag2"';
+}
+
 done_testing;

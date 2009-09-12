@@ -77,10 +77,10 @@ END
         );
     } qr{Net::Google::AuthSub login failed};
 }
-
 {
     my $u = 'example@gmail.com';
     my $p = 'foobar';
+    my $s = 'mysource';
 
     my $res = Test::MockObject->new;
     $res->mock(is_success => sub {1});
@@ -89,6 +89,7 @@ END
     my $auth = Test::MockModule->new('Net::Google::AuthSub');
     $auth->mock(login => sub {
             my ($self, $user, $pass) = @_;
+            is $self->{source}, $s;
             is $user, $u;
             is $pass, $p;
             return $res
@@ -98,6 +99,7 @@ END
     ok my $service = MyService->new(
         username => $u,
         password => $p,
+        source => $s,
     );
 
     isa_ok $service, 'MyService';

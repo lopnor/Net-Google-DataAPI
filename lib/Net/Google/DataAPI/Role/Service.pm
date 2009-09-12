@@ -51,6 +51,15 @@ role {
         lazy_build => 1,
     );
 
+    has source => (
+        isa => 'Str',
+        is => 'ro',
+        required => 1,
+        lazy_build => 1,
+    );
+
+    method _build_source => sub { $p->source };
+
     method ns => sub {
         my ($self, $name) = @_;
 
@@ -64,7 +73,7 @@ role {
         my $self = shift;
         my $authsub = Net::Google::AuthSub->new(
             service => $p->service,
-            source => $p->source,
+            source => $self->source,
         );
         my $res = $authsub->login(
             $self->username,

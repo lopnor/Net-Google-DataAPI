@@ -4,6 +4,7 @@ use Moose ();
 use Moose::Exporter;
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
+use XML::Atom;
 our $VERSION = '0.02';
 
 Moose::Exporter->setup_import_methods(
@@ -129,6 +130,9 @@ sub entry_has {
     $class->does_role('Net::Google::DataAPI::Role::Entry') 
         or confess 'Net::Google::DataAPI::Role::Entry required to use entry_has';
 
+    my $tagname = delete $args{tagname};
+    my $ns = delete $args{ns};
+
     my $from_atom = delete $args{from_atom};
     my $to_atom = delete $args{to_atom};
 
@@ -136,11 +140,29 @@ sub entry_has {
         $name => (
             isa => 'Str',
             is => 'ro',
-            $to_atom ? 
+            $to_atom || $tagname ? 
                 (trigger => sub {$_[0]->update }) : (),
             %args,
         )
     );
+    if ($tagname) {
+        $class->add_around_method_modifier(
+            to_atom => sub {
+                my ($next, $self) = @_;
+                my $entry = $next->($self);
+                my $ns_obj = $ns ? $self->ns($ns) : $entry->ns;
+                $entry->set($ns_obj, $tagname, $self->$name) if $self->$name;
+                return $entry;
+            }
+        );
+        $class->add_after_method_modifier(
+            from_atom => sub {
+                my $self = shift;
+                my $ns_obj = $ns ? $self->ns($ns) : $self->atom->ns;
+                $self->{$name} = $self->atom->get($ns_obj, $tagname);
+            }
+        );
+    }
     if ($to_atom) {
         $class->add_around_method_modifier(
             to_atom => sub {
@@ -185,20 +207,43 @@ Net::Google::DataAPI - Base implementations for modules to negotiate with Google
         # registering xmlns
   };
 
+  # registering feed url
   feedurl myentry => (
       entry_class => 'MyEntry',
+        # class name for the entry
       default => 'http://example.com/myfeed',
   );
 
   1;
 
-
   package MyEntry;
   use Moose;
+  with 'Net::Google::DataAPI::Role::Entry';
+
+  entry_has some_value => (
+      is => 'rw',
+      isa => 'Str',
+        # tagname
+      tagname => 'some_value',
+        # namespace
+      namespace => 'gd',
+  );
+
+  1;
 
 =head1 DESCRIPTION
 
 Net::Google::DataAPI is base implementations for modules to negotiate with Google Data APIs. 
+
+=head1 METHODS
+
+=head2 feedurl
+
+define a feed url. 
+
+=head2 entry_has
+
+define a entry attribute.
 
 =head1 AUTHOR
 

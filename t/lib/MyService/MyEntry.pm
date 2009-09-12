@@ -40,14 +40,7 @@ feedurl null_child => (
 entry_has foobar => (
     is => 'rw',
     isa => 'Str',
-    from_atom => sub {
-        my ($self, $atom) = @_;
-        return $atom->get($atom->ns, 'foobar');
-    },
-    to_atom => sub {
-        my ($self, $atom) = @_;
-        $atom->set($atom->ns, 'foobar', $self->foobar) if $self->foobar;
-    },
+    tagname => 'foobar',
 );
 
 __PACKAGE__->meta->make_immutable;
