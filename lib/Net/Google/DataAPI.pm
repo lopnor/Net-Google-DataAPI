@@ -21,7 +21,8 @@ sub feedurl {
 
     my $entry_class = delete $args{entry_class} 
         or confess 'entry_class not specified';
-    Class::MOP::load_class($entry_class)->does_role('Net::Google::DataAPI::Role::Entry')
+    Class::MOP::load_class($entry_class);
+    Class::MOP::class_of($entry_class)->does_role('Net::Google::DataAPI::Role::Entry')
         or confess "$entry_class should do Net::Google::DataAPI::Role::Entry role";
 
     my $can_add = delete $args{can_add};
