@@ -23,5 +23,6 @@ build_requires 'Test::MockObject';
 build_requires 'Test::MockModule';
 build_requires 'Test::Exception';
 
+auto_set_repository;
 auto_include;
 WriteAll;
