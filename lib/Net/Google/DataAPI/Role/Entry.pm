@@ -117,7 +117,23 @@ Net::Google::DataAPI::Role::Entry - represents entry of Google Data API
 
 =head1 SYNOPSIS
 
+    package MyEntry;
+    use Moose;
+    use Net::Google::DataAPI;
+    with 'Net::Google::DataAPI::Role::Entry';
+
+    entry_has some_data => (
+        is => 'ro',
+        isa => 'Str',
+        tagname => 'somedata',
+        ns => 'gd',
+    );
+
+    1;
+
 =head1 DESCRIPTION
+
+Net::Google::DataAPI::Role::Entry provides base functionalities for the entry of Google Data API.
 
 =head1 AUTHOR
 

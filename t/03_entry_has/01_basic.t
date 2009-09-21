@@ -27,6 +27,27 @@ Content-Type: application/atom-xml
     </entry>
 </feed>
 END
+my $feed_res_without_foobar = HTTP::Response->parse(<<END);
+200 OK
+Content-Type: application/atom-xml
+
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3c.org/2005/Atom'
+    xmlns:gd='http://schemas.google.com/g/2005'
+    xmlns:hoge='http://example.com/schema#hoge'>
+    <entry gd:etag='&quot;entryetag4&quot;'>
+        <id>http://example.com/myidurl</id>
+        <title type="text">my title</title>
+        <link rel="edit"
+            type="application/atom+xml"
+            href="http://example.com/myediturl" />
+        <link rel="self"
+            type="application/atom+xml"
+            href="http://example.com/myselfurl" />
+        <hoge:foobar />
+    </entry>
+</feed>
+END
 my $entry_res = HTTP::Response->parse(<<END);
 200 OK
 Content-Type: application/atom-xml
@@ -45,6 +66,27 @@ Content-Type: application/atom-xml
             type="application/atom+xml"
             href="http://example.com/myselfurl" />
         <hoge:foobar hoge:baz='fuga'>nyoro</hoge:foobar>
+    </entry>
+END
+
+my $entry_res_without_foobar = HTTP::Response->parse(<<END);
+200 OK
+Content-Type: application/atom-xml
+
+<?xml version='1.0' encoding='UTF-8'?>
+<entry xmlns='http://www.w3c.org/2005/Atom'
+    xmlns:gd='http://schemas.google.com/g/2005'
+    xmlns:hoge='http://example.com/schema#hoge'
+    gd:etag='&quot;entryetag3&quot;'>
+        <id>http://example.com/myidurl</id>
+        <title type="text">my title</title>
+        <link rel="edit"
+            type="application/atom+xml"
+            href="http://example.com/myediturl" />
+        <link rel="self"
+            type="application/atom+xml"
+            href="http://example.com/myselfurl" />
+        <hoge:foobar />
     </entry>
 END
 
@@ -174,10 +216,11 @@ END
     }
 
     $ua->mock(request => sub {$feed_res});
-    ok my $e = MyService3->new(
+    my $s = MyService3->new(
         username => 'example@gmail.com',
         password => 'foobar',
-    )->myentry;
+    );
+    ok my $e = $s->myentry;
     isa_ok $e, 'MyEntry3';
     is $e->foobar, 'piyo', 'getter with from_atom';
 
@@ -186,6 +229,16 @@ END
     is $e->foobar('nyoro'), 'nyoro';
     is $e->foobar, 'nyoro';
     is $e->etag, '"entryetag2"';
+    $ua->mock(request => sub {$entry_res_without_foobar});
+    is $e->foobar(''), '';
+    is $e->foobar, '';
+    is $e->etag, '"entryetag3"';
+
+
+    $ua->mock(request => sub {$feed_res_without_foobar});
+    my $e2 = $s->myentry;
+    isa_ok $e2, 'MyEntry3';
+    is $e2->foobar, '';
 }
 
 {

@@ -219,18 +219,40 @@ __END__
 
 =head1 NAME
 
-Net::Google::DataAPI::Role::Service - Represents Google Data API service 
+Net::Google::DataAPI::Role::Service - provides base functionalities for Google Data API service 
 
 =head1 SYNOPSIS
 
+    package MyService;
+    use Moose;
+    use Net::Google::DataAPI;
+    with 'Net::Google::DataAPI::Role::Service' => {
+        service => 'wise',
+        source => __PACKAGE__,
+        ns => {
+            foobar => 'http://example.com/schema#foobar',
+        },
+    }
+
+    feedurl hoge => (
+        is => 'ro',
+        isa => 'Str',
+        entry_class => 'MyService::Hoge',
+        default => 'http://example.com/feed/hoge',
+    );
+
+    1;
+
 =head1 DESCRIPTION
+
+=head1 AUTHOR
+
+Nobuo Danjou E<lt>nobuo.danjou@gmail.comE<gt>
 
 =head1 SEE ALSO
 
 L<Net::Google::AuthSub>
 
 L<Net::Google::DataAPI>
-
-=head1 AUTHOR
 
 =cut

@@ -218,6 +218,7 @@ Net::Google::DataAPI - Base implementations for modules to negotiate with Google
 
   package MyEntry;
   use Moose;
+  use Net::Google::DataAPI;
   with 'Net::Google::DataAPI::Role::Entry';
 
   entry_has some_value => (

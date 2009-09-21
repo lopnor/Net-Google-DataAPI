@@ -34,11 +34,22 @@ __END__
 
 =head1 NAME
 
-Net::Google::DataAPI::Role::HasContent - 
+Net::Google::DataAPI::Role::HasContent - provides 'param' method to Entry
 
 =head1 SYNOPSIS
 
+    package MyEntry;
+    use Moose;
+    with qw(
+        Net::Google::DataAPI::Role::Entry
+        Net::Google::DataAPI::Role::HasContent
+    );
+
+    1;
+
 =head1 DESCRIPTION
+
+Net::Google::DataAPI::Role::HasContent provides 'param' method to Entry.
 
 =head1 AUTHOR
 

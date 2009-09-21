@@ -10,3 +10,5 @@ nobuo.danjou@gmail.com
 Net::Google::GData
 API
 APIs
+feedurl
+url
