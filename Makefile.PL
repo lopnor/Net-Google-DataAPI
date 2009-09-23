@@ -17,6 +17,7 @@ tests_recursive;
 author_tests 'xt';
 
 build_requires 'Test::More' => '0.88';
+build_requires 'Test::Warn';
 build_requires 'UNIVERSAL::isa';
 build_requires 'UNIVERSAL::can';
 build_requires 'Test::MockObject';

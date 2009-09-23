@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::GData
 
+0.03    Wed Sep 23 10:47:17 2009
+
+        - Fix dependencies
+
 0.02    Mon Sep 21 19:57:00 2009
 
         - Fix test errors

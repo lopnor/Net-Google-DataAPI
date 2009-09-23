@@ -5,7 +5,7 @@ use Moose::Exporter;
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 Moose::Exporter->setup_import_methods(
     with_caller => ['feedurl', 'entry_has'],
