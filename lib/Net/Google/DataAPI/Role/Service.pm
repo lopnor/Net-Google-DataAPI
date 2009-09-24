@@ -79,7 +79,7 @@ role {
             $self->username,
             $self->password,
         );
-        unless ($res->is_success) {
+        unless ($res && $res->is_success) {
             confess 'Net::Google::AuthSub login failed';
         } 
         my $ua = LWP::UserAgent->new(

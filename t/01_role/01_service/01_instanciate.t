@@ -6,6 +6,7 @@ use Test::Exception;
 use Test::MockObject;
 use Test::MockModule;
 use URI::Escape;
+use HTTP::Response;
 
 BEGIN {
     use_ok('Net::Google::DataAPI::Role::Service');
