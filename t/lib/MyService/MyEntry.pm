@@ -2,6 +2,7 @@ package MyService::MyEntry;
 use Moose;
 use Net::Google::DataAPI;
 with 'Net::Google::DataAPI::Role::Entry';
+use XML::Atom::Util qw(textValue);
 
 feedurl child => (
     entry_class => 'MyService::MyEntry',
@@ -28,7 +29,8 @@ feedurl src_child => (
 feedurl atom_child => (
     entry_class => 'MyService::MyEntry',
     from_atom => sub {
-        my $atom = shift;
+        my ($self, $atom) = @_;
+        return textValue($self->elem, $self->ns('hoge')->{uri}, 'fuga');
         return $atom->id;
     }
 );

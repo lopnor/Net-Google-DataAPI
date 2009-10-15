@@ -28,9 +28,11 @@ Etag: "myetag"
 <?xml version='1.0' encoding='UTF-8'?>
 <feed xmlns='http://www.w3c.org/2005/Atom'
     xmlns:gd='http://schemas.google.com/g/2005'
+    xmlns:hoge='http://example.com/schemas#hoge'
     gd:etag='&quot;myetag&quot;'>
     <entry gd:etag='&quot;entryetag&quot;'>
         <id>http://example.com/myidurl</id>
+        <hoge:fuga>http://example.com/myidurl</hoge:fuga>
         <title type="text">my title</title>
         <link rel="edit"
             type="application/atom+xml"
@@ -76,9 +78,11 @@ Content-Type: application/atom+xml; charset=UTF-8 type=feed
 
 <?xml version='1.0' encoding='UTF-8'?>
 <feed xmlns='http://www.w3c.org/2005/Atom'
+    xmlns:hoge='http://example.com/schemas#hoge'
     xmlns:gd='http://schemas.google.com/g/2005' >
     <entry gd:etag='&quot;hogeetag&quot;'>
         <id>http://example.com/myidurl</id>
+        <hoge:fuga>http://example.com/myidurl</hoge:fuga>
         <title type="text">my hoge title</title>
         <link rel="edit"
             type="application/atom+xml"
@@ -114,10 +118,12 @@ Etag: "myetag"
 
 <?xml version='1.0' encoding='UTF-8'?>
 <feed xmlns='http://www.w3c.org/2005/Atom'
+    xmlns:hoge='http://example.com/schemas#hoge'
     xmlns:gd='http://schemas.google.com/g/2005'
     gd:etag='&quot;myetag&quot;'>
     <entry gd:etag='&quot;entry2etag&quot;'>
         <id>http://example.com/myidurl2</id>
+        <hoge:fuga>http://example.com/myidurl2</hoge:fuga>
         <title type="text">my 2 title</title>
         <link rel="edit"
             type="application/atom+xml"
@@ -133,6 +139,7 @@ Etag: "myetag"
     </entry>
     <entry gd:etag='&quot;entryetag&quot;'>
         <id>http://example.com/myidurl</id>
+        <hoge:fuga>http://example.com/myidurl</hoge:fuga>
         <title type="text">my title</title>
         <link rel="edit"
             type="application/atom+xml"

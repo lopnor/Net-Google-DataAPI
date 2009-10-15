@@ -5,7 +5,7 @@ use Moose::Exporter;
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 Moose::Exporter->setup_import_methods(
     with_caller => ['feedurl', 'entry_has'],
@@ -118,7 +118,7 @@ sub feedurl {
                     $as_content_src ? 
                         $self->atom->content->elem->getAttribute('src') :
                     $from_atom ?
-                        $from_atom->($self->atom) : undef;
+                        $from_atom->($self, $self->atom) : undef;
             }
         );
     }

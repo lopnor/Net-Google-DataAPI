@@ -4,6 +4,9 @@ use Net::Google::DataAPI;
 with 'Net::Google::DataAPI::Role::Service' => {
     service => 'wise',
     source => __PACKAGE__,
+    ns => {
+        hoge => 'http://example.com/schemas#hoge',
+    },
 };
 
 feedurl myentry => (
