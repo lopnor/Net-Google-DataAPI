@@ -5,7 +5,7 @@ use Moose::Exporter;
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 Moose::Exporter->setup_import_methods(
     with_caller => ['feedurl', 'entry_has'],
@@ -246,6 +246,10 @@ define a feed url.
 =head2 entry_has
 
 define a entry attribute.
+
+=head1 DEBUGGING
+
+You can set environment variable GOOGLE_DATAAPI_DEBUG=1 to see the raw requests and responses Net::Google::DataAPI sends and receives.
 
 =head1 AUTHOR
 

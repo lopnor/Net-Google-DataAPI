@@ -24,6 +24,12 @@ parameter ns => (
     default => sub { +{} },
 );
 
+parameter gdata_version => (
+    isa => 'Str',
+    required => 1,
+    default => '2.0',
+);
+
 role {
     my $p = shift;
 
@@ -34,7 +40,7 @@ role {
         isa => 'Str',
         is => 'ro',
         required => 1,
-        default => '2.0',
+        default => $p->gdata_version,
     );
 
     has ua => (

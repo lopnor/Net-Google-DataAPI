@@ -18,7 +18,8 @@ BEGIN {
     use Moose;
     with 'Net::Google::DataAPI::Role::Service' => {
         service => 'wise',
-        source => __PACKAGE__
+        source => __PACKAGE__,
+        gdata_version => '3.0',
     };
 }
 
@@ -54,7 +55,7 @@ END
 
     isa_ok $service, 'MyService';
     is $service->ua->default_headers->header('Authorization'), 'GoogleLogin auth=MYAuth';
-    is $service->ua->default_headers->header('GData_Version'), '2.0';
+    is $service->ua->default_headers->header('GData_Version'), '3.0';
 }
 {
     my $ua = Test::MockModule->new('LWP::UserAgent');
@@ -105,7 +106,7 @@ END
 
     isa_ok $service, 'MyService';
     is $service->ua->default_headers->header('Authorization'), 'GoogleLogin auth=foobar';
-    is $service->ua->default_headers->header('GData_Version'), '2.0';
+    is $service->ua->default_headers->header('GData_Version'), '3.0';
 }
 
 done_testing;

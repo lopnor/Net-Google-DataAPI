@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::GData
 
+0.05    Thu Oct 01 15:10:51 2009
+
+        - new gdata_version parameter for Net::Google::DataAPI::Role::Service
+
 0.04    Thu Sep 24 09:46:59 2009
 
         - Fix test errors with Net::Google::AuthSub
