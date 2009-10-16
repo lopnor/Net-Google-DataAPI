@@ -4,6 +4,7 @@ use lib 't/lib';
 use t::Util;
 use Test::More;
 use Test::MockModule;
+use Test::Exception;
 use HTTP::Response;
 
 {
@@ -142,6 +143,54 @@ END
     );
     ok $res->is_success;
     is $res->content, "OK\n";
+}
+{
+    $ua->mock(request => sub {
+            my ($self, $req) = @_;
+            ok $req;
+            is $req->method, 'POST';
+            is $req->uri, 'http://example.com/myentry';
+            is $req->header('If-Match'), '"hogehoge"';
+            is [split(/;/, $req->header('Content-Type'))]->[0], 'multipart/related';
+            is $req->content, 'foobar',
+            return $ua_res;
+        }
+    );
+    ok my $res = $s->request(
+        {
+            uri => 'http://example.com/myentry',
+            parts => [
+                HTTP::Message->new(
+                    ['Content-Type' => 'application/atom+xml'],
+                    <<END
+<?xml version="1.0" encoding="utf-8">
+<entry />
+END
+                ),
+                HTTP::Message->new(
+                    ['Content-Type' => 'text/plain'],
+                    'hogehoge',
+                ),
+            ],
+            header => {
+                'If-Match' => '"hogehoge"',
+            },
+        }
+    );
+    ok $res->is_success;
+    is $res->content, "OK\n";
+}
+{
+    throws_ok { 
+        $s->request(
+            {
+                uri => 'http://example.com/myentry',
+                parts => [
+                    'hoge',
+                ],
+            }
+        )
+    } qr{part argument should be a HTTP::Message object};
 }
 
 done_testing;

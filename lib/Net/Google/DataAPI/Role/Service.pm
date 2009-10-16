@@ -112,10 +112,18 @@ role {
     method request => sub {
         my ($self, $args) = @_;
         my $method = delete $args->{method};
-        $method = $args->{content} ? 'POST' : 'GET' unless $method;
+        $method = $args->{content} || $args->{parts} ? 'POST' : 'GET' unless $method;
         my $uri = URI->new($args->{uri});
         $uri->query_form($args->{query}) if $args->{query};
         my $req = HTTP::Request->new($method => "$uri");
+        if (my $parts = $args->{parts}) {
+            $req->header('Content-Type' => 'multipart/related');
+            for my $part (@$parts) {
+                ref $part eq 'HTTP::Message' 
+                    or confess "part argument should be a HTTP::Message object";
+                $req->add_part($part);
+            }
+        }
         $req->content($args->{content}) if $args->{content};
         $req->header('Content-Type' => $args->{content_type}) if $args->{content_type};
         if ($args->{header}) {
