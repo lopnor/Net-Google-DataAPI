@@ -15,9 +15,9 @@ sub feedurl {
     my ($caller, $name, %args) = @_;
 
     my $class = Class::MOP::class_of($caller);
-    $class->does_role('Net::Google::DataAPI::Role::Entry') 
-        or $class->does_role('Net::Google::DataAPI::Role::Service')
-        or confess 'Net::Google::DataAPI::Role::(Service|Entry) required to use feedurl';
+#    $class->does_role('Net::Google::DataAPI::Role::Entry') 
+#        or $class->does_role('Net::Google::DataAPI::Role::Service')
+#        or confess 'Net::Google::DataAPI::Role::(Service|Entry) required to use feedurl';
 
     my $entry_class = delete $args{entry_class} 
         or confess 'entry_class not specified';
@@ -63,7 +63,8 @@ sub feedurl {
                 Class::MOP::load_class($entry_class);
                 $args = $arg_builder->($self, $args);
                 my %parent = 
-                    $class->does_role('Net::Google::DataAPI::Role::Entry') ?
+                    $self->can('sync') ?
+#                    $class->does_role('Net::Google::DataAPI::Role::Entry') ?
                     ( container => $self ) : ( service => $self );
                 my $entry = $entry_class->new(
                     {
@@ -72,7 +73,8 @@ sub feedurl {
                     }
                 )->to_atom;
                 my $atom = $self->service->post($self->$attr_name, $entry);
-                $self->sync if $class->does_role('Net::Google::DataAPI::Role::Entry');
+#                $self->sync if $class->does_role('Net::Google::DataAPI::Role::Entry');
+                $self->sync if $self->can('sync');
                 my $e = $entry_class->new(
                     %parent,
                     atom => $atom,
@@ -90,7 +92,8 @@ sub feedurl {
             my $feed = $self->service->get_feed($self->$attr_name, $cond);
             return map {
                 $entry_class->new(
-                    $class->does_role('Net::Google::DataAPI::Role::Entry') ?
+                    $self->can('sync') ?
+#                    $class->does_role('Net::Google::DataAPI::Role::Entry') ?
                     ( container => $self ) : ( service => $self ),
                     atom => $_,
                 )

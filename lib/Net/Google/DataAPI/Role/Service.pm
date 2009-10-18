@@ -114,7 +114,13 @@ role {
         my $method = delete $args->{method};
         $method = $args->{content} || $args->{parts} ? 'POST' : 'GET' unless $method;
         my $uri = URI->new($args->{uri});
-        $uri->query_form($args->{query}) if $args->{query};
+        my @existing_query = $uri->query_form;
+        $uri->query_form(
+            {
+                @existing_query, 
+                %{$args->{query}}
+            }
+        ) if $args->{query};
         my $req = HTTP::Request->new($method => "$uri");
         if (my $parts = $args->{parts}) {
             $req->header('Content-Type' => 'multipart/related');

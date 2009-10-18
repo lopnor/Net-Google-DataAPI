@@ -5,6 +5,7 @@ use Test::More;
 use Test::Exception;
 use Test::MockModule;
 
+
 throws_ok {
     package MyService;
     use Moose;
@@ -47,36 +48,39 @@ throws_ok {
     throws_ok {$s->myentry} qr{myentry_feedurl is not set};
 } 
 
-throws_ok {
+#throws_ok {
+#    {
+#        package Foo;
+#        use Moose;
+#        use Net::Google::DataAPI;
+#
+#        feedurl 'bar' => (
+#            entry_class => 'Bar',
+#        );
+#    }
+#} qr{Net::Google::DataAPI::Role::\(Service|Entry\) required to use feedurl};
+
+{
     {
-        package Foo;
+        package Bar;
         use Moose;
-        use Net::Google::DataAPI;
-
-        feedurl 'bar' => (
-            entry_class => 'Bar',
-        );
     }
-} qr{Net::Google::DataAPI::Role::\(Service|Entry\) required to use feedurl};
+    throws_ok {
+        {
+            package MyService;
+            use Moose;
+            use Net::Google::DataAPI;
+#            with 'Net::Google::DataAPI::Role::Service' => {
+#                service => 'wise',
+#                source => __PACKAGE__
+#            };
 
-throws_ok {
-    {
-        package MyService;
-        use Moose;
-        use Net::Google::DataAPI;
-        with 'Net::Google::DataAPI::Role::Service' => {
-            service => 'wise',
-            source => __PACKAGE__
-        };
-
-        feedurl 'foo' => (
-            entry_class => 'Foo',
-            default => 'http://example.com/bar',
-        );
-    }
-    {
-        package Foo;
-    }
-} qr{Foo should do Net::Google::DataAPI::Role::Entry role};
+            feedurl 'foo' => (
+                entry_class => 'Bar',
+                default => 'http://example.com/bar',
+            );
+        }
+    } qr{Bar should do Net::Google::DataAPI::Role::Entry role};
+}
 
 done_testing;
