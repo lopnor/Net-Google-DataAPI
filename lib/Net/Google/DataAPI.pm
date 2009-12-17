@@ -1,28 +1,26 @@
 package Net::Google::DataAPI;
 use 5.008001;
-use Moose ();
-use Moose::Exporter;
+use Any::Moose;
+use Any::Moose '::Exporter';
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
-Moose::Exporter->setup_import_methods(
-    with_caller => ['feedurl', 'entry_has'],
+any_moose('::Exporter')->setup_import_methods(
+    as_is => ['feedurl', 'entry_has'],
 );
 
 sub feedurl {
-    my ($caller, $name, %args) = @_;
+    my ($name, %args) = @_;
 
-    my $class = Class::MOP::class_of($caller);
-#    $class->does_role('Net::Google::DataAPI::Role::Entry') 
-#        or $class->does_role('Net::Google::DataAPI::Role::Service')
-#        or confess 'Net::Google::DataAPI::Role::(Service|Entry) required to use feedurl';
+    my $class = caller;
 
     my $entry_class = delete $args{entry_class} 
         or confess 'entry_class not specified';
-    Class::MOP::load_class($entry_class);
-    Class::MOP::class_of($entry_class)->does_role('Net::Google::DataAPI::Role::Entry')
+    Any::Moose::load_class($entry_class);
+    my $entry_meta = any_moose('::Meta::Class')->initialize($entry_class);
+    $entry_meta->does_role('Net::Google::DataAPI::Role::Entry')
         or confess "$entry_class should do Net::Google::DataAPI::Role::Entry role";
 
     my $can_add = delete $args{can_add};
@@ -46,7 +44,8 @@ sub feedurl {
 
     my $attr_name = "${name}_feedurl";
 
-    $class->add_attribute(
+    my $class_meta = any_moose('::Meta::Class')->initialize($class);
+    $class_meta->add_attribute(
         $attr_name => (
             isa => 'Str',
             is => 'ro',
@@ -56,15 +55,14 @@ sub feedurl {
     my $pl_name = to_PL($name);
 
     if ($can_add) {
-        $class->add_method(
+        $class_meta->add_method(
             "add_$name" => sub {
                 my ($self, $args) = @_;
                 $self->$attr_name or confess "$attr_name is not set";
-                Class::MOP::load_class($entry_class);
+                Any::Moose::load_class($entry_class);
                 $args = $arg_builder->($self, $args);
                 my %parent = 
                     $self->can('sync') ?
-#                    $class->does_role('Net::Google::DataAPI::Role::Entry') ?
                     ( container => $self ) : ( service => $self );
                 my $entry = $entry_class->new(
                     {
@@ -73,7 +71,6 @@ sub feedurl {
                     }
                 )->to_atom;
                 my $atom = $self->service->post($self->$attr_name, $entry);
-#                $self->sync if $class->does_role('Net::Google::DataAPI::Role::Entry');
                 $self->sync if $self->can('sync');
                 my $e = $entry_class->new(
                     %parent,
@@ -83,32 +80,31 @@ sub feedurl {
             }
         );
     }
-    $class->add_method(
+    $class_meta->add_method(
         $pl_name => sub {
             my ($self, $cond) = @_;
             $self->$attr_name or confess "$attr_name is not set";
-            Class::MOP::load_class($entry_class);
+            Any::Moose::load_class($entry_class);
             $cond = $query_builder->($self, $cond);
             my $feed = $self->service->get_feed($self->$attr_name, $cond);
             return map {
                 $entry_class->new(
                     $self->can('sync') ?
-#                    $class->does_role('Net::Google::DataAPI::Role::Entry') ?
                     ( container => $self ) : ( service => $self ),
                     atom => $_,
                 )
             } $feed->entries;
         }
     );
-    $class->add_method(
+    $class_meta->add_method(
         $name => sub {
             my ($self, $cond) = @_;
             return [ $self->$pl_name($cond) ]->[0];
         }
     );
 
-    if ( $class->find_method_by_name('from_atom') ) {
-        $class->add_after_method_modifier(
+    if ( $class_meta->find_method_by_name('from_atom') ) {
+        $class_meta->add_after_method_modifier(
             'from_atom' => sub {
                 my ($self) = @_;
                 $self->{$attr_name} = 
@@ -128,10 +124,11 @@ sub feedurl {
 }
 
 sub entry_has {
-    my ($caller, $name, %args) = @_;
+    my ($name, %args) = @_;
 
-    my $class = Class::MOP::class_of($caller);
-    $class->does_role('Net::Google::DataAPI::Role::Entry') 
+    my $class = caller;
+    my $class_meta = any_moose('::Meta::Class')->initialize($class);
+    $class_meta->does_role('Net::Google::DataAPI::Role::Entry') 
         or confess 'Net::Google::DataAPI::Role::Entry required to use entry_has';
 
     my $tagname = delete $args{tagname};
@@ -140,7 +137,7 @@ sub entry_has {
     my $from_atom = delete $args{from_atom};
     my $to_atom = delete $args{to_atom};
 
-    $class->add_attribute(
+    $class_meta->add_attribute(
         $name => (
             isa => 'Str',
             is => 'ro',
@@ -150,7 +147,7 @@ sub entry_has {
         )
     );
     if ($tagname) {
-        $class->add_around_method_modifier(
+        $class_meta->add_around_method_modifier(
             to_atom => sub {
                 my ($next, $self) = @_;
                 my $entry = $next->($self);
@@ -159,7 +156,7 @@ sub entry_has {
                 return $entry;
             }
         );
-        $class->add_after_method_modifier(
+        $class_meta->add_after_method_modifier(
             from_atom => sub {
                 my $self = shift;
                 my $ns_obj = $ns ? $self->ns($ns) : $self->atom->ns;
@@ -168,7 +165,7 @@ sub entry_has {
         );
     }
     if ($to_atom) {
-        $class->add_around_method_modifier(
+        $class_meta->add_around_method_modifier(
             to_atom => sub {
                 my ($next, $self) = @_;
                 my $entry = $next->($self);
@@ -178,7 +175,7 @@ sub entry_has {
         );
     }
     if ($from_atom) {
-        $class->add_after_method_modifier(
+        $class_meta->add_after_method_modifier(
             from_atom => sub {
                 my $self = shift;
                 $self->{$name} = $from_atom->($self, $self->atom);

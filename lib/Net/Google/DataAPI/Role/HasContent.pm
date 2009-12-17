@@ -1,6 +1,6 @@
 package Net::Google::DataAPI::Role::HasContent;
-use Moose::Role;
-use namespace::clean -except => 'meta';
+use Any::Moose '::Role';
+use namespace::autoclean;
 
 requires 'update';
 

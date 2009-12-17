@@ -15,12 +15,31 @@ BEGIN {
 
 {
     package MyService;
-    use Moose;
-    with 'Net::Google::DataAPI::Role::Service' => {
-        service => 'wise',
-        source => __PACKAGE__,
-        gdata_version => '3.0',
-    };
+    use Any::Moose;
+    use Net::Google::AuthSub;
+    use Net::Google::DataAPI::Auth::AuthSub;
+    with 'Net::Google::DataAPI::Role::Service';
+    has '+gdata_version' => (default => '3.0');
+    has '+source' => (default => __PACKAGE__);
+
+    has password => (is => 'ro', isa => 'Str');
+    has username => (is => 'ro', isa => 'Str');
+
+    sub _build_auth {
+        my ($self) = @_;
+        my $authsub = Net::Google::AuthSub->new(
+            service => 'wise',
+            source => $self->source,
+        );
+        my $res = $authsub->login($self->username, $self->password);
+        unless ($res && $res->is_success) {
+            die 'Net::Google::AuthSub login failed';
+        }
+
+        return Net::Google::DataAPI::Auth::AuthSub->new(
+            authsub => $authsub,
+        );
+    }
 }
 
 {
@@ -54,7 +73,9 @@ END
     );
 
     isa_ok $service, 'MyService';
-    is $service->ua->default_headers->header('Authorization'), 'GoogleLogin auth=MYAuth';
+    my $req = HTTP::Request->new;
+    ok $service->auth->sign_request($req);
+    is $req->header('Authorization'), 'GoogleLogin auth="MYAuth"';
     is $service->ua->default_headers->header('GData_Version'), '3.0';
 }
 {
@@ -77,6 +98,8 @@ END
             username => 'example@gmail.com',
             password => 'foobar',
         );
+        my $req = HTTP::Request->new;
+        $service->auth->sign_request($req);
     } qr{Net::Google::AuthSub login failed};
 }
 {
@@ -90,6 +113,8 @@ END
             username => 'example@gmail.com',
             password => 'foobar',
         );
+        my $req = HTTP::Request->new;
+        $service->auth->sign_request($req);
     } qr{Net::Google::AuthSub login failed};
 }
 {
@@ -99,7 +124,6 @@ END
 
     my $res = Test::MockObject->new;
     $res->mock(is_success => sub {1});
-    $res->mock(auth => sub {'foobar'});
 
     my $auth = Test::MockModule->new('Net::Google::AuthSub');
     $auth->mock(login => sub {
@@ -110,6 +134,10 @@ END
             return $res
         }
     );
+    $auth->mock(auth_params => sub {
+            (Authorization => 'GoogleLogin auth="foobar"')
+        }
+    );
 
     ok my $service = MyService->new(
         username => $u,
@@ -118,7 +146,9 @@ END
     );
 
     isa_ok $service, 'MyService';
-    is $service->ua->default_headers->header('Authorization'), 'GoogleLogin auth=foobar';
+    my $req = HTTP::Request->new;
+    ok $service->auth->sign_request($req);
+    is $req->header('Authorization'), 'GoogleLogin auth="foobar"';
     is $service->ua->default_headers->header('GData_Version'), '3.0';
 }
 

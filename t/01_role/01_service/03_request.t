@@ -9,17 +9,40 @@ use HTTP::Response;
 
 {
     package MyService;
-    use Moose;
-    with 'Net::Google::DataAPI::Role::Service' => {
-        service => 'wise',
-        source => __PACKAGE__,
-    };
+    use Any::Moose;
+    use Net::Google::AuthSub;
+    use Net::Google::DataAPI::Auth::AuthSub;
+    with 'Net::Google::DataAPI::Role::Service';
+
+    has password => (is => 'ro', isa => 'Str');
+    has username => (is => 'ro', isa => 'Str');
+
+    sub _build_auth {
+        my ($self) = @_;
+        my $authsub = Net::Google::AuthSub->new(
+            service => 'wise',
+            source => $self->source,
+        );
+        my $res = $authsub->login($self->username, $self->password);
+        unless ($res && $res->is_success) {
+            die 'Net::Google::AuthSub login failed';
+        }
+        return  Net::Google::DataAPI::Auth::AuthSub->new(
+            authsub => $authsub
+        );
+    }
 }
 
 ok my $s = MyService->new(
     username => 'example@gmail.com',
     password => 'foobar',
 );
+
+my $res = Test::MockObject->new;
+$res->mock(is_success => sub {1});
+my $authsub = Test::MockModule->new('Net::Google::AuthSub');
+$authsub->mock(login => sub {return $res});
+$authsub->mock(auth_params => sub {(Authorization => 'GoogleLogin ="MYAuth"')}); 
 
 my $ua = Test::MockModule->new('LWP::UserAgent');
 my $ua_res = HTTP::Response->parse(<<END);

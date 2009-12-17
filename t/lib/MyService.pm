@@ -1,13 +1,15 @@
 package MyService;
-use Moose;
+use Any::Moose;
 use Net::Google::DataAPI;
-with 'Net::Google::DataAPI::Role::Service' => {
-    service => 'wise',
-    source => __PACKAGE__,
-    ns => {
-        hoge => 'http://example.com/schemas#hoge',
-    },
-};
+with 'Net::Google::DataAPI::Role::Service';
+
+has '+namespaces' => (
+    default => sub { 
+        +{
+            hoge => 'http://example.com/schemas#hoge',
+        }
+    }
+);
 
 feedurl myentry => (
     entry_class => 'MyService::MyEntry',

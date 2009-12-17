@@ -93,7 +93,7 @@ END
 {
     {
         package MyEntry;
-        use Moose;
+        use Any::Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Entry';
 
@@ -104,12 +104,9 @@ END
     }
     {
         package MyService;
-        use Moose;
+        use Any::Moose;
         use Net::Google::DataAPI;
-        with 'Net::Google::DataAPI::Role::Service' => {
-            service => 'wise',
-            source => __PACKAGE__,
-        };
+        with 'Net::Google::DataAPI::Role::Service';
 
         feedurl myentry => (
             entry_class => 'MyEntry',
@@ -118,10 +115,7 @@ END
     }
 
     $ua->mock(request => sub {$feed_res});
-    my $s = MyService->new(
-        username => 'example@gmail.com',
-        password => 'foobar',
-    );
+    my $s = MyService->new;
     ok my $e = $s->myentry;
     isa_ok $e, 'MyEntry';
     ok $e->etag;
@@ -133,7 +127,7 @@ END
 {
     {
         package MyEntry2;
-        use Moose;
+        use Any::Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Entry';
 
@@ -146,15 +140,16 @@ END
     }
     {
         package MyService2;
-        use Moose;
+        use Any::Moose;
         use Net::Google::DataAPI;
-        with 'Net::Google::DataAPI::Role::Service' => {
-            service => 'wise',
-            source => __PACKAGE__,
-            ns => {
-                hoge => 'http://example.com/schema#hoge',
-            },
-        };
+        with 'Net::Google::DataAPI::Role::Service';
+        has '+namespaces' => (
+            default => sub {
+                +{
+                    hoge => 'http://example.com/schema#hoge',
+                };
+            }
+        );
 
         feedurl myentry => (
             entry_class => 'MyEntry2',
@@ -163,10 +158,7 @@ END
     }
 
     $ua->mock(request => sub {$feed_res});
-    ok my $e = MyService2->new(
-        username => 'example@gmail.com',
-        password => 'foobar',
-    )->myentry;
+    ok my $e = MyService2->new->myentry;
     isa_ok $e, 'MyEntry2';
     is $e->foobar, 'piyo', 'getter with from_atom';
 
@@ -180,7 +172,7 @@ END
 {
     {
         package MyEntry3;
-        use Moose;
+        use Any::Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Entry';
 
@@ -199,15 +191,16 @@ END
     }
     {
         package MyService3;
-        use Moose;
+        use Any::Moose;
         use Net::Google::DataAPI;
-        with 'Net::Google::DataAPI::Role::Service' => {
-            service => 'wise',
-            source => __PACKAGE__,
-            ns => {
-                hoge => 'http://example.com/schema#hoge',
+        with 'Net::Google::DataAPI::Role::Service';
+        has '+namespaces' => (
+            default => sub {
+                {
+                    hoge => 'http://example.com/schema#hoge',
+                };
             },
-        };
+        );
 
         feedurl myentry => (
             entry_class => 'MyEntry3',
@@ -244,7 +237,7 @@ END
 {
     {
         package MyEntry4;
-        use Moose;
+        use Any::Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Entry';
 
@@ -257,15 +250,17 @@ END
     }
     {
         package MyService4;
-        use Moose;
+        use Any::Moose;
         use Net::Google::DataAPI;
-        with 'Net::Google::DataAPI::Role::Service' => {
-            service => 'wise',
-            source => __PACKAGE__,
-            ns => {
-                hoge => 'http://example.com/schema#hoge',
+        with 'Net::Google::DataAPI::Role::Service';
+
+        has '+namespaces' => (
+            default => sub {
+                {
+                    hoge => 'http://example.com/schema#hoge',
+                };
             },
-        };
+        );
 
         feedurl myentry => (
             entry_class => 'MyEntry4',

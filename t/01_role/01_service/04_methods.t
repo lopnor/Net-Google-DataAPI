@@ -8,18 +8,14 @@ use HTTP::Response;
 
 {
     package MyEntry;
-    use Moose;
+    use Any::Moose;
     with 'Net::Google::DataAPI::Role::Entry';
 }
-
 {
     package MyService;
-    use Moose;
+    use Any::Moose;
     use Net::Google::DataAPI;
-    with 'Net::Google::DataAPI::Role::Service' => {
-        service => 'wise',
-        source => __PACKAGE__,
-    };
+    with 'Net::Google::DataAPI::Role::Service';
 
     feedurl myentry => (
         entry_class => 'MyEntry',

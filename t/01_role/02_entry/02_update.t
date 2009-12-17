@@ -8,7 +8,7 @@ use t::Util;
 
 {
     package MyEntry;
-    use Moose;
+    use Any::Moose;
     use Net::Google::DataAPI;
     with 'Net::Google::DataAPI::Role::Entry';
     use XML::Atom::Util qw(textValue);
@@ -38,15 +38,15 @@ use t::Util;
 }
 {
     package MyService;
-    use Moose;
+    use Any::Moose;
     use Net::Google::DataAPI;
-    with 'Net::Google::DataAPI::Role::Service' => {
-        service => 'wise',
-        source => __PACKAGE__,
-        ns => {
-            foobar => 'http://example.com/schema#foobar'
-        }
-    };
+    with 'Net::Google::DataAPI::Role::Service';
+
+    has '+namespaces' => (
+        default => sub {
+            +{ foobar => 'http://example.com/schema#foobar' }
+        },
+    );
 
     feedurl myentry => (
         default => 'http://example.com/myfeed',

@@ -1,6 +1,6 @@
 package Net::Google::DataAPI::Role::Entry;
-use Moose::Role;
-use namespace::clean -except => 'meta';
+use Any::Moose '::Role';
+use namespace::autoclean;
 use Carp;
 use XML::Atom;
 use XML::Atom::Entry;

@@ -2,4 +2,4 @@
 allow=refs
 
 [TestingAndDebugging::RequireUseStrict]
-equivalent_modules = MooseX::Role::Parameterized
+equivalent_modules = Any::Moose
