@@ -66,6 +66,7 @@ sub get_request_token {
 
 sub get_authorize_token_url {
     my ($self) = @_;
+    $self->has_request_token or $self->get_request_token;
     my $url = $self->authorize_token_url;
     $url->query_form(
         oauth_token => $self->request_token,
@@ -82,11 +83,14 @@ sub get_access_token {
         'access token',
         {
             request_url => $self->get_access_token_url,
-            token => $self->clear_request_token,
-            token_secret => $self->clear_request_token_secret,
-            %$args,
+            token => $self->request_token,
+            token_secret => $self->request_token_secret,
+            %{$args || {}},
         }
     );
+    # now clear them.
+    $self->clear_request_token;
+    $self->clear_request_token_secret;
     my ($token, $secret) = $self->_res_to_token($res);
     $self->access_token($token);
     $self->access_token_secret($secret);
@@ -97,7 +101,7 @@ sub _oauth_request {
     my $req = $self->_make_oauth_request($type, $args);
     my $res = $self->ua->get($req->to_url);
     unless ($res && $res->is_success) {
-        Carp::cluck sprintf "request failed: %s", $res->status_line;
+        confess sprintf "request failed: %s", $res ? $res->status_line : 'no response returned';
     }
     return $res;
 }
@@ -146,21 +150,41 @@ __END__
 
 =head1 NAME
 
-Net::Google::DataAPI::Auth::OAuth - 
+Net::Google::DataAPI::Auth::OAuth - OAuth support for Google Data APIs
 
 =head1 SYNOPSIS
 
-  use Net::Google::DataAPI::Role::OAuth;
+  use Net::Google::DataAPI::Auth::OAuth;
+
+  my $auth = Net::Google::DataAPI::Auth::OAuth->new(
+    consumer_key => 'consumer.example.com',
+    consumer_secret => 'mys3cr3t',
+    scope => ['http://spreadsheets.google.com/feeds/'],
+  );
+  my $url = $auth->get_authorize_token_url;
+
+  # show the user $url and get $verifier
+
+  $auth->get_access_token({verifier => $verifier}) or die;
+  my $token = $auth->access_token;
+  my $secret = $auth->access_token_secret;
 
 =head1 DESCRIPTION
 
-Net::Google::Role::DataAPI::OAuth is
+Net::Google::DataAPI::Auth::OAuth interacts with google OAuth service
+and adds Authorization header to given request.
 
 =head1 AUTHOR
 
 Nobuo Danjou E<lt>nobuo.danjou@gmail.comE<gt>
 
 =head1 SEE ALSO
+
+L<Net::Google::AuthSub>
+
+L<Net::OAuth>
+
+L<Net::Twitter::Role::OAuth>
 
 =head1 LICENSE
 

@@ -7,6 +7,7 @@ use URI;
 use XML::Atom;
 use XML::Atom::Entry;
 use XML::Atom::Feed;
+use Net::Google::DataAPI::Auth::Null;
 
 has gdata_version => (
     isa => 'Str',
@@ -74,11 +75,7 @@ sub _build_ua {
     return $ua;
 }
 
-sub _build_auth {
-    my $noop = 'Net::Google::DataAPI::Auth::Noop';
-    Any::Moose::load_class($noop);
-    $noop->new;
-}
+sub _build_auth { Net::Google::DataAPI::Auth::Null->new }
 
 sub _build_service {return $_[0]}
 

@@ -1,7 +1,10 @@
 Revision history for Perl extension Net::Google::GData
 
-0.07    Mon Dec 07 14:40:00 2009
+0.07    Mon Dec 18 13:25:50 2009
 
+        - now uses Any::Moose
+        - OAuth support with Net::Google::DataAPI::Auth::OAuth
+        - Net::Google::DataAPI::Role::Service stops using MooseX::Role::Parameterized
         - multipart request support
         - less strict role check for feedurl
         - support for existing query form for request

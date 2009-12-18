@@ -6,12 +6,13 @@ requires 'Carp';
 requires 'XML::Atom';
 requires 'Net::Google::AuthSub';
 requires 'Crypt::SSLeay';
+requires 'Digest::SHA1';
+requires 'Net::OAuth';
 requires 'LWP::UserAgent';
 requires 'URI';
-requires 'Moose' => 0.34;
 requires 'Lingua::EN::Inflect::Number';
-requires 'MooseX::Role::Parameterized';
-requires 'namespace::clean';
+requires 'namespace::autoclean';
+requires_any_moose;
 
 tests_recursive;
 author_tests 'xt';
