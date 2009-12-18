@@ -1,5 +1,10 @@
 Revision history for Perl extension Net::Google::GData
 
+0.09    Fri Dec 18 19:33:50 2009
+
+        - $XML::Atom::ForceUnicode = 1
+        - move XML::Atom variables to Net::Google::DataAPI::Rose::Service
+
 0.08    Fri Dec 18 18:41:45 2009
 
         - fix dependency error for Moose

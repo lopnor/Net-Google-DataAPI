@@ -9,6 +9,9 @@ use XML::Atom::Entry;
 use XML::Atom::Feed;
 use Net::Google::DataAPI::Auth::Null;
 
+$XML::Atom::ForceUnicode = 1;
+$XML::Atom::DefaultVersion = 1;
+
 has gdata_version => (
     isa => 'Str',
     is => 'ro',

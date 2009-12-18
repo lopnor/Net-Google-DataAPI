@@ -73,7 +73,6 @@ sub from_atom {
 
 sub to_atom {
     my ($self) = @_;
-    $XML::Atom::DefaultVersion = 1;
     my $entry = XML::Atom::Entry->new;
     $entry->title($self->title);
     return $entry;
