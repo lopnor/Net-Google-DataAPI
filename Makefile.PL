@@ -12,7 +12,10 @@ requires 'LWP::UserAgent';
 requires 'URI';
 requires 'Lingua::EN::Inflect::Number';
 requires 'namespace::autoclean';
-requires_any_moose;
+requires_any_moose(
+    moose => '0.56',
+    mouse => '0.40',
+);
 
 tests_recursive;
 author_tests 'xt';
