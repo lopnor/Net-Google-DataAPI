@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::GData
 
+0.10    Mon Dec 21 11:13:30 2009
+
+        - fix broken tests
+
 0.09    Fri Dec 18 19:33:50 2009
 
         - $XML::Atom::ForceUnicode = 1
