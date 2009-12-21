@@ -194,7 +194,7 @@ Net::Google::DataAPI - Base implementations for modules to negotiate with Google
 =head1 SYNOPSIS
 
   package MyService;
-  use Moose;
+  use Any::Moose;
   use Net::Google::DataAPI;
 
   with 'Net::Google::DataAPI::Role::Service' => {
@@ -218,7 +218,7 @@ Net::Google::DataAPI - Base implementations for modules to negotiate with Google
   1;
 
   package MyEntry;
-  use Moose;
+  use Any::Moose;
   use Net::Google::DataAPI;
   with 'Net::Google::DataAPI::Role::Entry';
 

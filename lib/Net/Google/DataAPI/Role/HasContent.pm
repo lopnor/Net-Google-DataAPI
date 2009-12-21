@@ -39,7 +39,7 @@ Net::Google::DataAPI::Role::HasContent - provides 'param' method to Entry
 =head1 SYNOPSIS
 
     package MyEntry;
-    use Moose;
+    use Any::Moose;
     with qw(
         Net::Google::DataAPI::Role::Entry
         Net::Google::DataAPI::Role::HasContent

@@ -117,7 +117,7 @@ Net::Google::DataAPI::Role::Entry - represents entry of Google Data API
 =head1 SYNOPSIS
 
     package MyEntry;
-    use Moose;
+    use Any::Moose;
     use Net::Google::DataAPI;
     with 'Net::Google::DataAPI::Role::Entry';
 

@@ -217,7 +217,7 @@ Net::Google::DataAPI::Role::Service - provides base functionalities for Google D
 =head1 SYNOPSIS
 
     package MyService;
-    use Moose;
+    use Any::Moose;
     use Net::Google::DataAPI;
     with 'Net::Google::DataAPI::Role::Service' => {
         service => 'wise',

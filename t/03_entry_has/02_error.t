@@ -5,7 +5,7 @@ use Test::Exception;
 
 throws_ok {
     package MyaEntry;
-    use Moose;
+    use Any::Moose;
     use Net::Google::DataAPI;
 
     entry_has 'foobar' => (
