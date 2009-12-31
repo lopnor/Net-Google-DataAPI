@@ -5,7 +5,7 @@ use Any::Moose '::Exporter';
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 any_moose('::Exporter')->setup_import_methods(
     as_is => ['feedurl', 'entry_has'],
@@ -203,16 +203,14 @@ Net::Google::DataAPI - Base implementations for modules to negotiate with Google
   use Any::Moose;
   use Net::Google::DataAPI;
 
-  with 'Net::Google::DataAPI::Role::Service' => {
-      service => 'foobar', 
-        # see http://code.google.com/intl/ja/apis/gdata/faq.html#clientlogin
-      source => __PACKAGE__,
-        # source name to pass to Net::Google::AuthSub
-      ns => {
-          foobar => 'http://example.com/schema#foobar',
-      }
-        # registering xmlns
-  };
+  with 'Net::Google::DataAPI::Role::Service';
+
+  # registering xmlns
+  has '+namespaces' => (
+    default => {
+        foobar => 'http://example.com/schema#foobar',
+    },
+  );
 
   # registering feed url
   feedurl myentry => (
@@ -220,6 +218,18 @@ Net::Google::DataAPI - Base implementations for modules to negotiate with Google
         # class name for the entry
       default => 'http://example.com/myfeed',
   );
+
+  sub _build_auth {
+      my ($self) = @_;
+      # .. authsub login things, this is optional.
+      # see Net::Google::Spreadsheets for typical implementation
+      my $authsub = Net::Google::DataAPI::Auth::AuthSub->new(
+          service => 'wise',
+          account_type => 'HOSTED_OR_GOOGLE',
+      );
+      $authsub->login('foo.bar@gmail.com', 'p4ssw0rd');
+      return $authsub;
+  }
 
   1;
 
