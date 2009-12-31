@@ -58,7 +58,7 @@ END
         is $e[0]->child_feedurl, 'http://example.com/myentryfeed';
         is $e[0]->src_child_feedurl, 'http://example.com/srcofcontent';
         is $e[0]->atom_child_feedurl, 'http://example.com/myidurl';
-        is $e[0]->null_child_feedurl, undef;
+        is $e[0]->null_child_feedurl, '';
     }
     {
         ok my $e = $s->myentry({title => 'query title'});
@@ -66,7 +66,7 @@ END
         is $e->child_feedurl, 'http://example.com/myentryfeed';
         is $e->src_child_feedurl, 'http://example.com/srcofcontent';
         is $e->atom_child_feedurl, 'http://example.com/myidurl';
-        is $e->null_child_feedurl, undef;
+        is $e->null_child_feedurl, '';
         {
             $ua->mock(request => sub {
                     my ($self, $request) = @_;
@@ -165,7 +165,7 @@ END
         is $e[0]->child_feedurl, 'http://example.com/myentryfeed2';
         is $e[0]->src_child_feedurl, 'http://example.com/srcofcontent2';
         is $e[0]->atom_child_feedurl, 'http://example.com/myidurl2';
-        is $e[0]->null_child_feedurl, undef;
+        is $e[0]->null_child_feedurl, '';
         is $e[0]->title, 'my 2 title';
     }
     {
@@ -174,7 +174,7 @@ END
         is $e->child_feedurl, 'http://example.com/myentryfeed2';
         is $e->src_child_feedurl, 'http://example.com/srcofcontent2';
         is $e->atom_child_feedurl, 'http://example.com/myidurl2';
-        is $e->null_child_feedurl, undef;
+        is $e->null_child_feedurl, '';
         is $e->title, 'my 2 title';
     }
 }

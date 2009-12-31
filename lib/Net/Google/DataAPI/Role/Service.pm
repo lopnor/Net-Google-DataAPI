@@ -7,6 +7,7 @@ use URI;
 use XML::Atom;
 use XML::Atom::Entry;
 use XML::Atom::Feed;
+use Net::Google::DataAPI::Types;
 use Net::Google::DataAPI::Auth::Null;
 
 $XML::Atom::ForceUnicode = 1;
@@ -42,10 +43,11 @@ has source => (
 
 has auth => (
     is => 'ro',
-    does => 'Net::Google::DataAPI::Role::Auth',
+    does => 'Net::Google::DataAPI::Types::Auth',
     required => 1,
     lazy_build => 1,
     handles => ['sign_request'],
+    coerce => 1,
 );
 
 has namespaces => (

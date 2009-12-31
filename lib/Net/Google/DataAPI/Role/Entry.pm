@@ -26,8 +26,21 @@ my %rel2label = (
     self => 'selfurl',
 );
 
-for (values %rel2label) {
-    has $_ => (isa => 'Str', is => 'ro');
+for my $label (values %rel2label) {
+    has $label => (
+        isa => 'Str',
+        is => 'ro',
+        lazy_build => 1,
+    );
+
+    __PACKAGE__->meta->add_method(
+        "_build_$label" => sub {
+            my $self = shift;
+            for my $link ($self->atom->link) {
+                return $link->href if $rel2label{$link->rel} eq $label;
+            }
+        }
+    );
 }
 
 has atom => (
@@ -45,29 +58,44 @@ has atom => (
 has id => (
     isa => 'Str',
     is => 'ro',
+    lazy_build => 1,
 );
+
+sub _build_id {
+    my $self = shift;
+    $self->atom->get($self->atom->ns, 'id') || '';
+}
 
 has title => (
     isa => 'Str',
     is => 'rw',
-    default => 'untitled',
-    trigger => sub {$_[0]->update}
+    trigger => sub {$_[0]->update},
+    lazy_build => 1,
 );
+
+sub _build_title {
+    my $self = shift;
+    $self->atom ? $self->atom->title : 'untitled';
+}
 
 has etag => (
     isa => 'Str',
     is => 'rw',
+    lazy_build => 1,
 );
+
+sub _build_etag {
+    my $self = shift;
+    $self->atom or return '';
+    $self->elem->getAttributeNS($self->ns('gd')->{uri}, 'etag');
+}
 
 
 sub from_atom {
     my ($self) = @_;
-    $self->{title} = $self->atom->title;
-    $self->{id} = $self->atom->get($self->atom->ns, 'id');
-    $self->etag($self->elem->getAttributeNS($self->ns('gd')->{uri}, 'etag'));
-    for ($self->atom->link) {
-        my $label = $rel2label{$_->rel} or next;
-        $self->{$label} = $_->href;
+    for my $attr ($self->meta->get_all_attributes) {
+        $attr->name eq 'service' and next;
+        $attr->clear_value($self) if $attr->{lazy};
     }
 }
 
