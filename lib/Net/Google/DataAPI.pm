@@ -135,6 +135,7 @@ sub entry_has {
 
     my $from_atom = delete $args{from_atom};
     my $to_atom = delete $args{to_atom};
+    my $default = delete $args{default} || '';
 
     $class_meta->add_attribute(
         $name => (
@@ -162,9 +163,9 @@ sub entry_has {
         $class_meta->add_method(
             "_build_$name" => sub {
                 my $self = shift;
-                $self->atom or return '';
+                $self->atom or return $default;
                 my $ns_obj = $ns ? $self->ns($ns) : $self->atom->ns;
-                return $self->atom->get($ns_obj, $tagname);
+                return $self->atom->get($ns_obj, $tagname) || $default;
             }
         );
     }
@@ -182,8 +183,8 @@ sub entry_has {
         $class_meta->add_method(
             "_build_$name" => sub {
                 my $self = shift;
-                $self->atom or return '';
-                return $from_atom->($self, $self->atom);
+                $self->atom or return $default;
+                return $from_atom->($self, $self->atom) || $default;
             }
         );
     }

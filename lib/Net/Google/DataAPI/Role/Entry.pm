@@ -37,7 +37,8 @@ for my $label (values %rel2label) {
         "_build_$label" => sub {
             my $self = shift;
             for my $link ($self->atom->link) {
-                return $link->href if $rel2label{$link->rel} eq $label;
+                my $rel = $rel2label{$link->rel} or next;
+                return $link->href if $rel eq $label;
             }
         }
     );
