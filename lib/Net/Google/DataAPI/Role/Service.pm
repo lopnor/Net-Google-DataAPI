@@ -86,33 +86,8 @@ sub _build_service {return $_[0]}
 
 sub request {
     my ($self, $args) = @_;
-    my $method = delete $args->{method};
-    $method = $args->{content} || $args->{parts} ? 'POST' : 'GET' unless $method;
-    my $uri = URI->new($args->{uri});
-    my @existing_query = $uri->query_form;
-    $uri->query_form(
-        {
-            @existing_query, 
-            %{$args->{query}}
-        }
-    ) if $args->{query};
-    my $req = HTTP::Request->new($method => "$uri");
-    if (my $parts = $args->{parts}) {
-        $req->header('Content-Type' => 'multipart/related');
-        for my $part (@$parts) {
-            ref $part eq 'HTTP::Message' 
-                or confess "part argument should be a HTTP::Message object";
-            $req->add_part($part);
-        }
-    }
-    $req->content($args->{content}) if $args->{content};
-    $req->header('Content-Type' => $args->{content_type}) if $args->{content_type};
-    if ($args->{header}) {
-        while (my @pair = each %{$args->{header}}) {
-            $req->header(@pair);
-        }
-    }
-    $self->sign_request($req);
+    my $req = $self->prepare_request($args);
+    my $uri = $req->uri;
     my $res = eval {$self->ua->request($req)};
     if ($ENV{GOOGLE_DATAAPI_DEBUG} && $res) {
         warn $res->request ? $res->request->as_string : $req->as_string;
@@ -144,6 +119,38 @@ sub request {
         return $obj;
     }
     return $res;
+}
+
+sub prepare_request {
+    my ($self, $args) = @_;
+    my $method = delete $args->{method};
+    $method = $args->{content} || $args->{parts} ? 'POST' : 'GET' unless $method;
+    my $uri = URI->new($args->{uri});
+    my @existing_query = $uri->query_form;
+    $uri->query_form(
+        {
+            @existing_query, 
+            %{$args->{query}}
+        }
+    ) if $args->{query};
+    my $req = HTTP::Request->new($method => "$uri");
+    if (my $parts = $args->{parts}) {
+        $req->header('Content-Type' => 'multipart/related');
+        for my $part (@$parts) {
+            ref $part eq 'HTTP::Message' 
+                or confess "part argument should be a HTTP::Message object";
+            $req->add_part($part);
+        }
+    }
+    $req->content($args->{content}) if $args->{content};
+    $req->header('Content-Type' => $args->{content_type}) if $args->{content_type};
+    if ($args->{header}) {
+        while (my @pair = each %{$args->{header}}) {
+            $req->header(@pair);
+        }
+    }
+    $self->sign_request($req);
+    return $req;
 }
 
 sub get_feed {
