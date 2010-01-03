@@ -1,5 +1,10 @@
 Revision history for Perl extension Net::Google::GData
 
+0.12    Mon Jan 04 04:21:00 2010
+
+        - new Net::Google::DataAPI::Auth::ClientLogin::Multiple
+        - new prepare_request method
+
 0.11    Thu Dec 31 18:30:00 2009
 
         - refactored internals
