@@ -60,27 +60,27 @@ throws_ok {
 #    }
 #} qr{Net::Google::DataAPI::Role::\(Service|Entry\) required to use feedurl};
 
-{
-    {
-        package Bar;
-        use Any::Moose;
-    }
-    throws_ok {
-        {
-            package MyService;
-            use Any::Moose;
-            use Net::Google::DataAPI;
-#            with 'Net::Google::DataAPI::Role::Service' => {
-#                service => 'wise',
-#                source => __PACKAGE__
-#            };
-
-            feedurl 'foo' => (
-                entry_class => 'Bar',
-                default => 'http://example.com/bar',
-            );
-        }
-    } qr{Bar should do Net::Google::DataAPI::Role::Entry role};
-}
+# {
+#     {
+#         package Bar;
+#         use Any::Moose;
+#     }
+#     throws_ok {
+#         {
+#             package MyService;
+#             use Any::Moose;
+#             use Net::Google::DataAPI;
+# #            with 'Net::Google::DataAPI::Role::Service' => {
+# #                service => 'wise',
+# #                source => __PACKAGE__
+# #            };
+# 
+#             feedurl 'foo' => (
+#                 entry_class => 'Bar',
+#                 default => 'http://example.com/bar',
+#             );
+#         }
+#     } qr{Bar should do Net::Google::DataAPI::Role::Entry role};
+# }
 
 done_testing;

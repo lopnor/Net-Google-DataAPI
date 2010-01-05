@@ -5,7 +5,7 @@ use Any::Moose '::Exporter';
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 any_moose('::Exporter')->setup_import_methods(
     as_is => ['feedurl', 'entry_has'],
@@ -18,10 +18,6 @@ sub feedurl {
 
     my $entry_class = delete $args{entry_class} 
         or confess 'entry_class not specified';
-    Any::Moose::load_class($entry_class);
-    my $entry_meta = any_moose('::Meta::Class')->initialize($entry_class);
-    $entry_meta->does_role('Net::Google::DataAPI::Role::Entry')
-        or confess "$entry_class should do Net::Google::DataAPI::Role::Entry role";
 
     my $can_add = delete $args{can_add};
     $can_add = 1 unless defined $can_add;
@@ -54,6 +50,10 @@ sub feedurl {
             %args,
         )
     );
+    $class_meta->add_method(
+        "${name}_entryclass" => sub { $entry_class }
+    );
+
     $class_meta->add_method(
         "_build_$attr_name" => sub {
             my $self = shift;

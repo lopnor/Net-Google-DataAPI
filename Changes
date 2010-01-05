@@ -1,5 +1,10 @@
 Revision history for Perl extension Net::Google::GData
 
+0.13    Tue Jan 05 12:40:00 2010
+
+        - entry_class of feedurl doesn't need to do 'Entry' role
+        - DataAPI makes entry class name accessor with feedurl method
+
 0.12    Mon Jan 04 04:21:00 2010
 
         - new Net::Google::DataAPI::Auth::ClientLogin::Multiple
