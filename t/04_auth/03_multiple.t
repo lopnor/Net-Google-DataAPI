@@ -49,7 +49,7 @@ END
         GET => 'https://docs.google.com/feeds/default/private/full'
     );
     ok $auth->sign_request($req);
-    is $req->header('Authorization'), 'GoogleLogin auth="MYAuth_for_writely"'
+    is $req->header('Authorization'), 'GoogleLogin auth=MYAuth_for_writely'
 }
 
 {
@@ -98,14 +98,14 @@ END
         GET => 'http://spreadsheets.google.com/feeds/spreadsheets/private/full'
     );
     ok $auth->sign_request($req);
-    is $req->header('Authorization'), 'GoogleLogin auth="MYAuth_for_wise"'
+    is $req->header('Authorization'), 'GoogleLogin auth=MYAuth_for_wise'
 }
 {
     my $req = HTTP::Request->new(
         GET => 'https://docs.google.com/feeds/default/private/full'
     );
     ok $auth->sign_request($req);
-    is $req->header('Authorization'), 'GoogleLogin auth="MYAuth_for_writely"'
+    is $req->header('Authorization'), 'GoogleLogin auth=MYAuth_for_writely'
 }
 {
     my $req = HTTP::Request->new(

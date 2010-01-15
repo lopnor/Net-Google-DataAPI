@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::GData
 
+0.14    Fri Jan 15 10:23:30 2010
+
+        - Force 'uncuddled_auth' on Net::Google::AuthSub _compat params
+
 0.13    Tue Jan 05 12:40:00 2010
 
         - entry_class of feedurl doesn't need to do 'Entry' role

@@ -75,7 +75,7 @@ END
     isa_ok $service, 'MyService';
     my $req = HTTP::Request->new;
     ok $service->auth->sign_request($req);
-    is $req->header('Authorization'), 'GoogleLogin auth="MYAuth"';
+    is $req->header('Authorization'), 'GoogleLogin auth=MYAuth';
     is $service->ua->default_headers->header('GData_Version'), '3.0';
 }
 {
@@ -135,7 +135,7 @@ END
         }
     );
     $auth->mock(auth_params => sub {
-            (Authorization => 'GoogleLogin auth="foobar"')
+            (Authorization => 'GoogleLogin auth=foobar')
         }
     );
 
@@ -148,7 +148,7 @@ END
     isa_ok $service, 'MyService';
     my $req = HTTP::Request->new;
     ok $service->auth->sign_request($req);
-    is $req->header('Authorization'), 'GoogleLogin auth="foobar"';
+    is $req->header('Authorization'), 'GoogleLogin auth=foobar';
     is $service->ua->default_headers->header('GData_Version'), '3.0';
 }
 

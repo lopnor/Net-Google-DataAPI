@@ -3,7 +3,7 @@ use Any::Moose;
 use Net::Google::AuthSub;
 with 'Net::Google::DataAPI::Role::Auth';
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 has account_type => ( is => 'ro', isa => 'Str', required => 1, default => 'HOSTED_OR_GOOGLE' );
 has source   => ( is => 'ro', isa => 'Str', required => 1, default => __PACKAGE__ );
@@ -28,6 +28,7 @@ sub _get_auth_params {
         source      => $self->source,
         service     => $self->services->{$host},
         accountType => $self->account_type,
+        _compat     => {uncuddled_auth => 1}, #to export docs
     );
     my $res = $authsub->login(
         $self->username,
