@@ -4,7 +4,7 @@ all_from 'lib/Net/Google/DataAPI.pm';
 
 requires 'Carp';
 requires 'XML::Atom';
-requires 'Net::Google::AuthSub';
+requires 'Net::Google::AuthSub' => '0.5';
 requires 'Crypt::SSLeay';
 requires 'Digest::SHA1';
 requires 'Net::OAuth';

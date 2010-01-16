@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::GData
 
+0.16    Sat Jan 16 18:05:00 2010
+
+        - depends on Net::Google::AuthSub 0.5
+
 0.15    Sat Jan 16 11:12:30 2010
 
         - entry_has accepts coderef default
