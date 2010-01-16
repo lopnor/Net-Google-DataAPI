@@ -5,7 +5,7 @@ use Any::Moose '::Exporter';
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 any_moose('::Exporter')->setup_import_methods(
     as_is => ['feedurl', 'entry_has'],
@@ -136,6 +136,7 @@ sub entry_has {
     my $from_atom = delete $args{from_atom};
     my $to_atom = delete $args{to_atom};
     my $default = delete $args{default} || '';
+    $default = $default->() if ref $default eq 'CODE';
 
     $class_meta->add_attribute(
         $name => (

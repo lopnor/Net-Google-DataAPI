@@ -90,6 +90,27 @@ Content-Type: application/atom-xml
     </entry>
 END
 
+my $entry_res_true = HTTP::Response->parse(<<END);
+200 OK
+Content-Type: application/atom-xml
+
+<?xml version='1.0' encoding='UTF-8'?>
+<entry xmlns='http://www.w3c.org/2005/Atom'
+    xmlns:gd='http://schemas.google.com/g/2005'
+    xmlns:hoge='http://example.com/schema#hoge'
+    gd:etag='&quot;entryetag2&quot;'>
+        <id>http://example.com/myidurl</id>
+        <title type="text">my title</title>
+        <link rel="edit"
+            type="application/atom+xml"
+            href="http://example.com/myediturl" />
+        <link rel="self"
+            type="application/atom+xml"
+            href="http://example.com/myselfurl" />
+        <hoge:foobar hoge:baz='fuga'>1</hoge:foobar>
+    </entry>
+END
+
 {
     {
         package MyEntry;
@@ -281,6 +302,52 @@ END
     is $e->foobar('nyoro'), 'nyoro';
     is $e->foobar, 'nyoro';
     is $e->etag, '"entryetag2"';
+}
+
+{
+    {
+        package MyEntry5;
+        use Any::Moose;
+        use Net::Google::DataAPI;
+        with 'Net::Google::DataAPI::Role::Entry';
+
+        entry_has foobar => (
+            isa => 'Bool',
+            is => 'rw',
+            ns => 'hoge',
+            tagname => 'foobar',
+            default => sub {return 0},
+        );
+    }
+    {
+        package MyService5;
+        use Any::Moose;
+        use Net::Google::DataAPI;
+        with 'Net::Google::DataAPI::Role::Service';
+
+        has '+namespaces' => (
+            default => sub {
+                {
+                    hoge => 'http://example.com/schema#hoge',
+                };
+            },
+        );
+
+        feedurl myentry => (
+            entry_class => 'MyEntry5',
+            default => 'http://example.com/myentry',
+        );
+    }
+
+    $ua->mock(request => sub {$feed_res_without_foobar});
+    my $s = MyService5->new;
+    ok my $e = $s->myentry;
+    isa_ok $e, 'MyEntry5';
+    ok $e->etag;
+    is $e->foobar, 0;
+    $ua->mock(request => sub {$entry_res_true});
+    is $e->foobar(1), 1;
+    is $e->foobar, 1;
 }
 
 done_testing;
