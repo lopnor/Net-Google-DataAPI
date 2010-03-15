@@ -13,8 +13,9 @@ requires 'URI';
 requires 'Lingua::EN::Inflect::Number';
 requires 'namespace::autoclean';
 requires_any_moose(
+    prefer => 'Moose',
     moose => '0.56',
-    mouse => '0.40',
+    mouse => '0.51',
 );
 
 tests_recursive;
