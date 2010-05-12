@@ -1,7 +1,10 @@
 package Net::Google::DataAPI::Auth::OAuth;
 use Any::Moose;
 
-with 'Net::Google::DataAPI::Role::Auth';
+with qw{
+   Net::Google::DataAPI::Role::Auth
+   Net::Google::DataAPI::Role::Types
+};
 use Digest::SHA1;
 use LWP::UserAgent;
 use Net::OAuth;
@@ -26,7 +29,7 @@ for my $attr (qw(
 }
 
 has scope => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1, auto_deref => 1 );
-has callback => ( is => 'ro', isa => 'URI' );
+has callback => ( is => 'ro', isa => 'URL', coerce => 1 );
 has signature_method => ( is => 'ro', isa => 'Str', default => 'HMAC-SHA1' );
 has authorize_token_hd => ( is => 'ro', isa => 'Str', default => 'default' );
 has authorize_token_hl => ( is => 'ro', isa => 'Str', default => 'en' );
