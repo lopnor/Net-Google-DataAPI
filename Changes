@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::GData
 
+0.18    Sun May 16 10:08:00 2010
+
+        - coerce OAuth callback url from Str (thanks to notbenh)
+
 0.17    Sat Mar 15 22:51:00 2010
 
         - depends on Mouse 0.51

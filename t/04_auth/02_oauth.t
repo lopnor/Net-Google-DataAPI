@@ -178,7 +178,7 @@ BEGIN {
         scope => ['http://spreadsheets.google.com/feeds/'],
         consumer_key => 'myconsumer.example.com',
         consumer_secret => 'mys3cr3t',
-        callback => 'http://myconsumer.example.com/callback',
+        callback => 'myconsumer.example.com',
         authorize_token_hl => 'ja',
         mobile => 1,
     );
