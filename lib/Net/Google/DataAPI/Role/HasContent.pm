@@ -1,15 +1,18 @@
 package Net::Google::DataAPI::Role::HasContent;
 use Any::Moose '::Role';
 use namespace::autoclean;
+our $VERSION='0.02';
 
 requires 'update';
 
 has content => (
     isa => 'HashRef',
     is => 'rw',
-    default => sub { +{} },
+    lazy_build => 1,
     trigger => sub { $_[0]->update },
 );
+
+sub _build_content { +{} }
 
 sub param {
     my ($self, $arg) = @_;

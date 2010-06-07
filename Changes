@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::GData
 
+0.19    Mon Jul 07 12:27:00 2010
+
+        - make 'lazy_build' the content property of Role::HasContent 
+
 0.18    Sun May 16 10:08:00 2010
 
         - coerce OAuth callback url from Str (thanks to notbenh)
