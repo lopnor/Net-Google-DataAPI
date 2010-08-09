@@ -1,5 +1,7 @@
 Revision history for Perl extension Net::Google::GData
 
+        - use space instead of comma for scope parameter
+
 0.19    Mon Jul 07 12:27:00 2010
 
         - make 'lazy_build' the content property of Role::HasContent 

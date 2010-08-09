@@ -53,7 +53,7 @@ sub get_request_token {
         { 
             request_url => $self->get_request_token_url,
             extra_params => {
-                scope => join(',', $self->scope),
+                scope => join(' ', $self->scope),
             },
             callback => $self->callback || 'oob',
         }

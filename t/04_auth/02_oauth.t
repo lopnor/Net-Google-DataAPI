@@ -21,7 +21,7 @@ BEGIN {
             is $uri->scheme, 'https';
             is $uri->path, '/accounts/OAuthGetRequestToken';
             is {$uri->query_form}->{oauth_consumer_key}, 'myconsumer.example.com';
-            is {$uri->query_form}->{scope}, 'http://spreadsheets.google.com/feeds/';
+            is {$uri->query_form}->{scope}, 'http://spreadsheets.google.com/feeds/ https://spreadsheets.google.com/feeds/';
             is {$uri->query_form}->{oauth_callback}, 'oob';
 
             my $q = URI->new;
@@ -36,7 +36,7 @@ BEGIN {
     );
 
     ok my $oauth = Net::Google::DataAPI::Auth::OAuth->new(
-        scope => ['http://spreadsheets.google.com/feeds/'],
+        scope => ['http://spreadsheets.google.com/feeds/', 'https://spreadsheets.google.com/feeds/'],
         consumer_key => 'myconsumer.example.com',
         consumer_secret => 'mys3cr3t',
     );
