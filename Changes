@@ -1,8 +1,11 @@
-Revision history for Perl extension Net::Google::GData
+Revision history for Perl extension Net::Google::DataAPI
 
-        - use space instead of comma for scope parameter
+0.20    Tue Aug 10 11:30:00 2010
 
-0.19    Mon Jul 07 12:27:00 2010
+        - use space instead of comma for scope parameter (thanks to dwc)
+        - more documentations for Net::Google::DataAPI::Auth::OAuth (thanks to Matthew Richardson)
+
+0.19    Mon Jun 07 12:27:00 2010
 
         - make 'lazy_build' the content property of Role::HasContent 
 

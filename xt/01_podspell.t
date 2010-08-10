@@ -7,7 +7,7 @@ all_pod_files_spelling_ok('lib');
 __DATA__
 Nobuo Danjou
 nobuo.danjou@gmail.com
-Net::Google::GData
+Net::Google::DataAPI
 API
 APIs
 feedurl
@@ -15,3 +15,11 @@ url
 TODO
 param
 OAuth
+HMAC
+SHA
+apps
+auth
+callback
+en
+oob
+urls

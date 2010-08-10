@@ -5,7 +5,7 @@ use Any::Moose '::Exporter';
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 
 any_moose('::Exporter')->setup_import_methods(
     as_is => ['feedurl', 'entry_has'],
@@ -279,6 +279,12 @@ more pods.
 =head1 SEE ALSO
 
 L<Net::Google::AuthSub>
+
+L<Net::Google::DataAPI::Auth::AuthSub>
+
+L<Net::Google::DataAPI::Auth::ClientLogin::Multiple>
+
+L<Net::Google::DataAPI::Auth::OAuth>
 
 L<Net::Google::DataAPI::Role::Service>
 

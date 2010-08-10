@@ -7,7 +7,7 @@ use LWP::UserAgent;
 use Net::OAuth;
 use URI;
 $Net::OAuth::PROTOCOL_VERSION = Net::OAuth::PROTOCOL_VERSION_1_0A;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 has [qw(consumer_key consumer_secret)] => ( is => 'ro', isa => 'Str', required => 1 );
 
@@ -173,6 +173,48 @@ Net::Google::DataAPI::Auth::OAuth - OAuth support for Google Data APIs
 
 Net::Google::DataAPI::Auth::OAuth interacts with google OAuth service
 and adds Authorization header to given request.
+
+=head1 ATTRIBUTES
+
+You can make Net::Google::DataAPI::Auth::OAuth instance with those arguments below:
+
+=over 2
+
+=item * consumer_key
+
+Consumer key. You can get it at L<https://www.google.com/accounts/ManageDomains>.
+
+=item * consumer_secret
+
+The consumer secret paired with the consumer key.
+
+=item * scope
+
+URL identifying the service(s) to be accessed. You can see the list of the urls to use at L<http://code.google.com/intl/en-US/apis/gdata/faq.html#AuthScopes>.
+
+=item * callback
+
+OAuth callback url. 'oob' will be used if you don't specify it.
+
+=item * signature_method
+
+Signature method. The default is 'HMAC-SHA1'.
+
+=item * authorize_token_hd
+
+Set hosted domain account for hosted google apps users. Defaults to 'default'.
+
+=item * authorize_token_hl
+
+An ISO 639 country code to set authorize user interface language. Defaults to 'en'.
+
+=item * mobile
+
+A boolean value whether you use this auth with mobile or not. defaults to 0.
+
+=back
+
+See L<http://code.google.com/intl/en-US/apis/accounts/docs/OAuth_ref.html> for details.
 
 =head1 AUTHOR
 
