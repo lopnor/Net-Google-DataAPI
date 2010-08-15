@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.22    Sun Aug 15 17:50:00 2010
+
+        - fix typo
+
 0.21    Sun Aug 15 13:00:00 2010
 
         - removed unnecessary depencencies (#60236)
