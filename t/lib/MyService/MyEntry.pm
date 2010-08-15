@@ -47,4 +47,7 @@ entry_has foobar => (
 
 __PACKAGE__->meta->make_immutable;
 
+no Any::Moose;
+no Net::Google::DataAPI;
+
 1;

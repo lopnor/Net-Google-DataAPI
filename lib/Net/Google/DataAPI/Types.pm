@@ -5,6 +5,8 @@ use Net::Google::DataAPI::Auth::AuthSub;
 use Net::Google::AuthSub;
 use URI;
 
+our $VERSSION = '0.02';
+
 role_type 'Net::Google::DataAPI::Types::Auth'
     => {role => 'Net::Google::DataAPI::Role::Auth'};
 

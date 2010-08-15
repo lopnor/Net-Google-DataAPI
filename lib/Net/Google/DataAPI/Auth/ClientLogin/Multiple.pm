@@ -3,7 +3,7 @@ use Any::Moose;
 use Net::Google::AuthSub;
 with 'Net::Google::DataAPI::Role::Auth';
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 has account_type => ( is => 'ro', isa => 'Str', required => 1, default => 'HOSTED_OR_GOOGLE' );
 has source   => ( is => 'ro', isa => 'Str', required => 1, default => __PACKAGE__ );

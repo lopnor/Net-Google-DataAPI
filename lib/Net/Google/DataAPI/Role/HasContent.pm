@@ -1,6 +1,6 @@
 package Net::Google::DataAPI::Role::HasContent;
 use Any::Moose '::Role';
-our $VERSION='0.02';
+our $VERSION='0.03';
 
 requires 'update';
 

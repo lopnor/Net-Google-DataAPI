@@ -1,5 +1,10 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.21    Sun Aug 15 13:00:00 2010
+
+        - removed unnecessary depencencies (#60236)
+        - fix failing test
+
 0.20    Tue Aug 10 11:30:00 2010
 
         - use space instead of comma for scope parameter (thanks to dwc)

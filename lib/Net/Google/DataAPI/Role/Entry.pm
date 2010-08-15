@@ -3,6 +3,7 @@ use Any::Moose '::Role';
 use Carp;
 use XML::Atom;
 use XML::Atom::Entry;
+our $VERSION = '0.02';
 
 has container => (
     isa => 'Maybe[Net::Google::DataAPI::Role::Entry]',

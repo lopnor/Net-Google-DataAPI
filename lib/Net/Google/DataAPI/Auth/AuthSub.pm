@@ -3,7 +3,7 @@ use Any::Moose;
 with 'Net::Google::DataAPI::Role::Auth';
 use Net::Google::AuthSub;
 use URI;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 has authsub => (
     is => 'ro',

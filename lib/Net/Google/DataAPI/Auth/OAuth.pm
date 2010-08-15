@@ -7,7 +7,7 @@ use LWP::UserAgent;
 use Net::OAuth;
 use URI;
 $Net::OAuth::PROTOCOL_VERSION = Net::OAuth::PROTOCOL_VERSION_1_0A;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 has [qw(consumer_key consumer_secret)] => ( is => 'ro', isa => 'Str', required => 1 );
 
