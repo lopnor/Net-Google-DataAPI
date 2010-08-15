@@ -1,6 +1,5 @@
 use strict;
 use warnings;
-use t::Util;
 use Test::More;
 use Test::MockModule;
 use HTTP::Response;

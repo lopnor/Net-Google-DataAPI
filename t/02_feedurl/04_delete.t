@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use lib 't/lib';
-use t::Util;
 use Test::More;
 use Test::Exception;
 use Test::MockModule;

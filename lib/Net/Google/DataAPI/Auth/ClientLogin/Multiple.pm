@@ -38,6 +38,10 @@ sub _get_auth_params {
     return [ $authsub->auth_params ];
 }
 
+__PACKAGE__->meta->make_immutable;
+
+no Any::Moose;
+
 1;
 __END__
 

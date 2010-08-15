@@ -1,7 +1,6 @@
 use strict;
 use warnings;
 use Test::More;
-use t::Util;
 
 BEGIN {
     use_ok 'Net::Google::DataAPI::Role::Entry';

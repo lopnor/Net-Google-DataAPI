@@ -1,6 +1,5 @@
 package Net::Google::DataAPI::Role::Entry;
 use Any::Moose '::Role';
-use namespace::autoclean;
 use Carp;
 use XML::Atom;
 use XML::Atom::Entry;
@@ -132,6 +131,8 @@ sub delete {
     $self->container->sync if $self->container;
     return $res->is_success;
 }
+
+no Any::Moose '::Role';
 
 1;
 

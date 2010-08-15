@@ -11,9 +11,8 @@ requires 'Net::OAuth';
 requires 'LWP::UserAgent';
 requires 'URI';
 requires 'Lingua::EN::Inflect::Number';
-requires 'namespace::autoclean';
 requires_any_moose(
-    prefer => 'Moose',
+    prefer => 'Mouse',
     moose => '0.56',
     mouse => '0.51',
 );

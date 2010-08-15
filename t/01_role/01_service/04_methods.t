@@ -1,7 +1,5 @@
 use strict;
 use warnings;
-use lib 't/lib';
-use t::Util;
 use Test::More;
 use Test::MockModule;
 use HTTP::Response;
@@ -22,7 +20,6 @@ use HTTP::Response;
         default => 'http://example.com/myfeed',
     );
 }
-
 my $ua = Test::MockModule->new('LWP::UserAgent');
 my $ok_res = HTTP::Response->parse(<<END);
 200 OK

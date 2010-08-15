@@ -26,4 +26,9 @@ coerce 'Net::Google::DataAPI::Types::URI'
     => from 'Str'
     => via { URI->new(( m{://} ) ? $_ : ('http://'.$_)) };
 
+__PACKAGE__->meta->make_immutable;
+
+no Any::Moose;
+no Any::Moose '::Util::TypeConstraints';
+
 1;

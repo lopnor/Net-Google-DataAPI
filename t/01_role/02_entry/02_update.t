@@ -4,7 +4,6 @@ use Test::More;
 use Test::MockModule;
 use Test::Exception;
 use HTTP::Response;
-use t::Util;
 
 {
     package MyEntry;

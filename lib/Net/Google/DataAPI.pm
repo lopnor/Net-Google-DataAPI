@@ -191,6 +191,10 @@ sub entry_has {
     }
 }
 
+__PACKAGE__->meta->make_immutable;
+no Any::Moose;
+no Any::Moose '::Exporter';
+
 1;
 __END__
 

@@ -3,7 +3,7 @@ use URI;
 
 {
     package My::Test;
-    use Moose;
+    use Any::Moose;
     use Net::Google::DataAPI::Types;
 
     has url => (

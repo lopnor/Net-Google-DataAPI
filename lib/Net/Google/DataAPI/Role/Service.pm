@@ -1,6 +1,5 @@
 package Net::Google::DataAPI::Role::Service;
 use Any::Moose '::Role';
-use namespace::autoclean;
 use Carp;
 use LWP::UserAgent;
 use URI;
@@ -212,6 +211,8 @@ sub delete {
     );
     return $res;
 }
+
+no Any::Moose '::Role';
 
 1;
 

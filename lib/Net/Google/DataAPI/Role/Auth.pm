@@ -1,7 +1,6 @@
 package Net::Google::DataAPI::Role::Auth;
 use Any::Moose '::Role';
-use namespace::autoclean;
-
 requires 'sign_request';
+no Any::Moose '::Role';
 
 1;

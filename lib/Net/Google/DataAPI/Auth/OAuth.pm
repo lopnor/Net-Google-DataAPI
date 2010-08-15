@@ -145,6 +145,9 @@ sub sign_request {
     return $req;
 }
 
+__PACKAGE__->meta->make_immutable;
+no Any::Moose;
+
 1;
 __END__
 

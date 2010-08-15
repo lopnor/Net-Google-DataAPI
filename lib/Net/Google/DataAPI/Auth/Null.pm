@@ -4,4 +4,7 @@ with 'Net::Google::DataAPI::Role::Auth';
 
 sub sign_request {$_[1]};
 
+__PACKAGE__->meta->make_immutable;
+no Any::Moose;
+
 1;
