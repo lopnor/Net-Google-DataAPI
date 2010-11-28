@@ -11,6 +11,7 @@ requires 'Net::OAuth';
 requires 'LWP::UserAgent';
 requires 'URI';
 requires 'Lingua::EN::Inflect::Number';
+requires 'Text::Glob';
 requires_any_moose(
     prefer => 'Mouse',
     moose => '0.56',

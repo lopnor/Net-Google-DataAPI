@@ -17,6 +17,7 @@ ok my $auth = Net::Google::DataAPI::Auth::ClientLogin::Multiple->new(
     services => {
         'docs.google.com' => 'writely',
         'spreadsheets.google.com' => 'wise',
+        '*docs.googleusercontent.com' => 'writely'
     }
 );
 {
@@ -99,6 +100,29 @@ END
     );
     ok $auth->sign_request($req);
     is $req->header('Authorization'), 'GoogleLogin auth=MYAuth_for_wise'
+}
+{
+    $ua->mock(
+        request => sub {
+            my ($self, $req) = @_;
+            my $post = URI->new;
+            $post->query($req->content);
+            is {$post->query_form}->{service}, 'writely';
+            return HTTP::Response->parse(<<END);
+200 OK
+Content-Type: text/plain
+
+SID=MYSID
+LSID=MYLSID
+Auth=MYAuth_for_writely
+END
+        }
+    );
+    my $req = HTTP::Request->new(
+        GET => 'https://doc-0s-6s-docs.googleusercontent.com/docs/secure'
+    );
+    ok $auth->sign_request($req);
+    is $req->header('Authorization'), 'GoogleLogin auth=MYAuth_for_writely'
 }
 {
     my $req = HTTP::Request->new(

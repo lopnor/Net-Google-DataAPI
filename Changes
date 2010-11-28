@@ -1,5 +1,10 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.23    Sun Nov 28 19:00:00 2010
+
+        - Content-Type check only work with request with response_object parameter
+        - supports wildcard on domain for N::G::D::Auth::ClientLogin::Multiple
+
 0.22    Sun Aug 15 17:50:00 2010
 
         - fix typo

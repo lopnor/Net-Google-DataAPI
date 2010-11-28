@@ -8,7 +8,7 @@ use XML::Atom::Entry;
 use XML::Atom::Feed;
 use Net::Google::DataAPI::Types;
 use Net::Google::DataAPI::Auth::Null;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 $XML::Atom::ForceUnicode = 1;
 $XML::Atom::DefaultVersion = 1;
@@ -102,14 +102,14 @@ sub request {
         );
     }
     my $type = $res->content_type;
-    if ($res->content_length && $type !~ m{^application/atom\+xml}) {
-        confess sprintf(
-            "Content-Type of response for '%s' is not 'application/atom+xml':  %s",
-            $uri, 
-            $type
-        );
-    }
     if (my $res_obj = $args->{response_object}) {
+        if ($res->content_length && $type !~ m{^application/atom\+xml}) {
+            confess sprintf(
+                "Content-Type of response for '%s' is not 'application/atom+xml':  %s",
+                $uri, 
+                $type
+            );
+        }
         my $obj = eval {$res_obj->new(\($res->content))};
         confess sprintf(
             "response for '%s' is broken: %s", 

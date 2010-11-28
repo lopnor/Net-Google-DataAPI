@@ -1,9 +1,10 @@
 package Net::Google::DataAPI::Auth::ClientLogin::Multiple;
 use Any::Moose;
 use Net::Google::AuthSub;
+use Text::Glob;
 with 'Net::Google::DataAPI::Role::Auth';
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 has account_type => ( is => 'ro', isa => 'Str', required => 1, default => 'HOSTED_OR_GOOGLE' );
 has source   => ( is => 'ro', isa => 'Str', required => 1, default => __PACKAGE__ );
@@ -22,11 +23,17 @@ sub sign_request {
 
 sub _get_auth_params {
     my ($self, $host) = @_;
-    exists $self->services->{$host} 
-        or confess "service for $host not defined";
+    my $service = $self->services->{$host};
+    unless ($service) {
+        for my $s (grep {$_ =~ m/\*/} keys %{$self->services}) {
+            Text::Glob::match_glob($s, $host)
+                and $service = $self->services->{$s} and last;
+        }
+    }
+    $service or confess "service for $host not defined";
     my $authsub = Net::Google::AuthSub->new(
         source      => $self->source,
-        service     => $self->services->{$host},
+        service     => $service,
         accountType => $self->account_type,
         _compat     => {uncuddled_auth => 1}, #to export docs
     );
