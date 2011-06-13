@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.24    Mon Jun 13 15:14:00 2011
+        - requires LWP::Protocol::https
+
 0.23    Sun Nov 28 19:00:00 2010
 
         - Content-Type check only work with request with response_object parameter
