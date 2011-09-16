@@ -149,7 +149,7 @@ sub prepare_request {
             $req->header(@pair);
         }
     }
-    $self->sign_request($req);
+    $self->sign_request($req, $args->{sign_host});
     return $req;
 }
 

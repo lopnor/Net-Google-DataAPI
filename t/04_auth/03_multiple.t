@@ -133,6 +133,13 @@ END
 }
 {
     my $req = HTTP::Request->new(
+        GET => 'https://docs.google.com/feeds/default/private/full'
+    );
+    ok $auth->sign_request($req, 'spreadsheets.google.com');
+    is $req->header('Authorization'), 'GoogleLogin auth=MYAuth_for_wise', 'overriding sign host';
+}
+{
+    my $req = HTTP::Request->new(
         GET => 'http://www.yahoo.com',
     );
     throws_ok {

@@ -4,7 +4,7 @@ use Net::Google::AuthSub;
 use Text::Glob;
 with 'Net::Google::DataAPI::Role::Auth';
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 has account_type => ( is => 'ro', isa => 'Str', required => 1, default => 'HOSTED_OR_GOOGLE' );
 has source   => ( is => 'ro', isa => 'Str', required => 1, default => __PACKAGE__ );
@@ -14,8 +14,8 @@ has services => ( is => 'ro', isa => 'HashRef', required => 1 );
 has tokens => ( is => 'rw', isa => 'HashRef', default => sub { +{} });
 
 sub sign_request {
-    my ($self, $req) = @_;
-    my $host = $req->uri->host;
+    my ($self, $req, $host) = @_;
+    $host ||= $req->uri->host;
     $self->tokens->{$host} ||= $self->_get_auth_params($host);
     $req->header(@{$self->tokens->{$host}});
     return $req;
@@ -73,6 +73,9 @@ Net::Google::DataAPI::Auth::ClientLogin::Multiple - keeps and sings auth_params 
   );
   $auth->sign_request($req);
   # sets $req Authorization header
+
+  $auth->sign_request($req, 'spreadsheets.google.com');
+  # set authorization header for 'spreadsheets.google.com', not for 'docs.google.com'.
 
 =head1 DESCRIPTION
 

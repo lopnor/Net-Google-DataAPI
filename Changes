@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.25    Fri Sep 16 13:55:00 2011
+        - Net::Google::DataAPI::Role::Service->request can take sign_host parameter
+        - Net::Google::DataAPI::Auth::ClientLogin::Multiple->sign_request can take host parameter
+
 0.24    Mon Jun 13 15:14:00 2011
         - requires LWP::Protocol::https
 
