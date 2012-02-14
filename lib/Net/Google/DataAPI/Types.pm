@@ -3,6 +3,7 @@ use Any::Moose;
 use Any::Moose '::Util::TypeConstraints';
 use Net::Google::DataAPI::Auth::AuthSub;
 use Net::Google::AuthSub;
+use Net::OAuth2::AccessToken;
 use URI;
 
 our $VERSION = '0.02';
@@ -27,6 +28,13 @@ subtype 'Net::Google::DataAPI::Types::URI'
 coerce 'Net::Google::DataAPI::Types::URI'
     => from 'Str'
     => via { URI->new(( m{://} ) ? $_ : ('http://'.$_)) };
+
+subtype 'Net::Google::DataAPI::Types::OAuth2::AccessToken'
+    => as 'Net::OAuth2::AccessToken';
+
+coerce 'Net::Google::DataAPI::Types::OAuth2::AccessToken'
+    => from 'HashRef'
+    => via { Net::OAuth2::AccessToken->new(%$_) };
 
 __PACKAGE__->meta->make_immutable;
 

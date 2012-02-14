@@ -7,6 +7,7 @@ requires 'XML::Atom';
 requires 'Net::Google::AuthSub' => '0.5';
 requires 'Digest::SHA1';
 requires 'Net::OAuth';
+requires 'Net::OAuth2';
 requires 'LWP::UserAgent';
 requires 'LWP::Protocol::https';
 requires 'URI';
