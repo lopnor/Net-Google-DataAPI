@@ -89,7 +89,7 @@ sub sign_request {
         $self->refresh_token or die 'refresh_token failed';
     }
     $req->header(Authorization => join(' ',
-            $at->{token_type}, 
+            'Bearer',
             $at->access_token,
         )
     );
