@@ -93,7 +93,7 @@ sub request {
         warn $res->request ? $res->request->as_string : $req->as_string;
         warn $res->as_string;
     }
-    if ($@ || !$res->is_success) {
+    if ($@ || $res->is_error) {
         confess sprintf(
             "request for '%s' failed:\n\t%s\n\t%s\n\t", 
             $uri, 
@@ -101,8 +101,8 @@ sub request {
             ($res ? $res->content : $!),
         );
     }
-    my $type = $res->content_type;
     if (my $res_obj = $args->{response_object}) {
+        my $type = $res->content_type;
         if ($res->content_length && $type !~ m{^application/atom\+xml}) {
             confess sprintf(
                 "Content-Type of response for '%s' is not 'application/atom+xml':  %s",
@@ -123,6 +123,9 @@ sub request {
 
 sub prepare_request {
     my ($self, $args) = @_;
+    if (ref($args) eq 'HTTP::Request') {
+        return $args;
+    }
     my $method = delete $args->{method};
     $method = $args->{content} || $args->{parts} ? 'POST' : 'GET' unless $method;
     my $uri = URI->new($args->{uri});
