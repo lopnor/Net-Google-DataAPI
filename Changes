@@ -1,5 +1,10 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.26    Thu Apr 05 20:15:00 2012
+        - Supports OAuth2 with Net::Google::DataAPI::Auth::OAuth2
+        - now Net::Google::DataAPI::Role::Service->request does not fail with 30X codes
+        - Net::Google::DataAPI::Role::Service->prepare_request passes through HTTP::Request object
+
 0.25    Fri Sep 16 13:55:00 2011
         - Net::Google::DataAPI::Role::Service->request can take sign_host parameter
         - Net::Google::DataAPI::Auth::ClientLogin::Multiple->sign_request can take host parameter

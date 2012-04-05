@@ -111,18 +111,37 @@ Net::Google::DataAPI::Auth::OAuth2 - OAuth2 support for Google Data APIs
 
   use Net::Google::DataAPI::Auth::OAuth2;
 
-  my $auth = Net::Google::DataAPI::Auth::OAuth2->new(
-    consumer_key => 'consumer.example.com',
-    consumer_secret => 'mys3cr3t',
+  my $oauth2 = Net::Google::DataAPI::Auth::OAuth2->new(
+    client_id => 'xxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com',
+    client_secret => 'mys3cr33333333333333t',
     scope => ['http://spreadsheets.google.com/feeds/'],
+
+    # with web apps, redirect_uri is needed:
+    #
+    #   redirect_uri => 'http://your_app.sample.com/callback',
+
   );
-  my $url = $auth->get_authorize_token_url;
+  my $url = $oauth2->authorize_url();
 
-  # show the user $url and get $verifier
+  # show the user $url and get $code
+  # if you're making web app, you will do:
+  #
+  #   return $c->redirect($auth->authorize_url());
+  #
+  # getting $code from the request to the 'redirect_uri' in web apps:
+  #
+  #   my $code = $c->req->param('code');
+  #
+  # in installed apps:
+  #
+  #   use Term::Prompt;
+  #   my $code = prompt('x', 'paste the code: ', '', '');
 
-  $auth->get_access_token({verifier => $verifier}) or die;
-  my $token = $auth->access_token;
-  my $secret = $auth->access_token_secret;
+  my $token = $oauth2->get_access_token($code) or die;
+
+  # after retrieving $token, you can use $oauth2 with Net::Google::DataAPI items:
+
+  my $client = Net::Google::Spreadsheets->new(auth => $oauth2);
 
 =head1 DESCRIPTION
 
@@ -135,41 +154,25 @@ You can make Net::Google::DataAPI::Auth::OAuth2 instance with those arguments be
 
 =over 2
 
-=item * consumer_key
+=item * client_id
 
-Consumer key. You can get it at L<https://www.google.com/accounts/ManageDomains>.
+client id. You can get it at L<https://code.google.com/apis/console#access>.
 
-=item * consumer_secret
+=item * client_secret
 
-The consumer secret paired with the consumer key.
+The client secret paired with the client id.
 
 =item * scope
 
-URL identifying the service(s) to be accessed. You can see the list of the urls to use at L<http://code.google.com/intl/en-US/apis/gdata/faq.html#AuthScopes>.
+URL identifying the service(s) to be accessed. You can see the list of the urls to use at L<http://code.google.com/intl/en-US/apis/gdata/faq.html#AuthScopes>
 
-=item * callback
+=item * redirect_url
 
-OAuth callback url. 'oob' will be used if you don't specify it.
-
-=item * signature_method
-
-Signature method. The default is 'HMAC-SHA1'.
-
-=item * authorize_token_hd
-
-Set hosted domain account for hosted google apps users. Defaults to 'default'.
-
-=item * authorize_token_hl
-
-An ISO 639 country code to set authorize user interface language. Defaults to 'en'.
-
-=item * mobile
-
-A boolean value whether you use this auth with mobile or not. defaults to 0.
+OAuth2 redirect url. 'urn:ietf:wg:oauth:2.0:oob' will be used if you don't specify it.
 
 =back
 
-See L<http://code.google.com/intl/en-US/apis/accounts/docs/OAuth2.html> for details.
+See L<https://developers.google.com/accounts/docs/OAuth2> for details.
 
 =head1 AUTHOR
 
@@ -177,9 +180,11 @@ Nobuo Danjou E<lt>nobuo.danjou@gmail.comE<gt>
 
 =head1 SEE ALSO
 
-L<Net::Google::AuthSub>
-
 L<Net::OAuth2>
+
+L<https://developers.google.com/accounts/docs/OAuth2> 
+
+you can see sample implementations for oauth2 client both as installed and web app in the eg directory of this distribution.
 
 =head1 LICENSE
 

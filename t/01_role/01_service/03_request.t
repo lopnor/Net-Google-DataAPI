@@ -51,6 +51,10 @@ Content-Type: text/plain
 OK
 END
 
+my $res_308 = HTTP::Response->new(308, 'Resume Incomplete');
+$res_308->header(Range => '0-524287');
+$res_308->header(Location => 'http://example.com/next');
+
 {
     $ua->mock(request => sub {
             my ($self, $req) = @_;
@@ -213,6 +217,16 @@ END
             }
         )
     } qr{part argument should be a HTTP::Message object};
+}
+
+{
+    $ua->mock(request => sub {
+            my ($self, $req) = @_;
+            return $res_308;
+        }
+    );
+    ok my $res = $s->request({method => 'PUT', uri => 'http://example.com/myfeed'});
+    is $res->code, 308;
 }
 
 done_testing;

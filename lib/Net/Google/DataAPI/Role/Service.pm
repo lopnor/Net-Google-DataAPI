@@ -8,7 +8,7 @@ use XML::Atom::Entry;
 use XML::Atom::Feed;
 use Net::Google::DataAPI::Types;
 use Net::Google::DataAPI::Auth::Null;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 $XML::Atom::ForceUnicode = 1;
 $XML::Atom::DefaultVersion = 1;
