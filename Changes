@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.26_1  Fri Apr 06 11:00:00 2012
+        - fix test failures
+        - requires Net::OAuth2 0.07
+
 0.26    Thu Apr 05 20:15:00 2012
         - Supports OAuth2 with Net::Google::DataAPI::Auth::OAuth2
         - now Net::Google::DataAPI::Role::Service->request does not fail with 30X codes

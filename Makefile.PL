@@ -7,7 +7,7 @@ requires 'XML::Atom';
 requires 'Net::Google::AuthSub' => '0.5';
 requires 'Digest::SHA1';
 requires 'Net::OAuth';
-requires 'Net::OAuth2';
+requires 'Net::OAuth2' => '0.07';
 requires 'LWP::UserAgent';
 requires 'LWP::Protocol::https';
 requires 'URI';
@@ -31,5 +31,4 @@ build_requires 'Test::MockModule';
 build_requires 'Test::Exception';
 
 auto_set_repository;
-auto_include;
 WriteAll;
