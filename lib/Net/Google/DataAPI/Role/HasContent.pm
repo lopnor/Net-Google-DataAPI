@@ -57,7 +57,7 @@ Net::Google::DataAPI::Role::HasContent provides 'param' method to Entry.
 
 =head1 AUTHOR
 
-Nobuo Danjou E<lt>nobuo.danjou@gmail.comE<gt>
+Nobuo Danjou E<lt>danjou@soffritto.orgE<gt>
 
 =head1 LICENSE
 

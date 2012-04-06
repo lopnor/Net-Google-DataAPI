@@ -83,7 +83,7 @@ This module keeps and sings auth_params for multiple google Data API domains.
 
 =head1 AUTHOR
 
-Nobuo Danjou E<lt>nobuo.danjou@gmail.comE<gt>
+Nobuo Danjou E<lt>danjou@soffritto.orgE<gt>
 
 =head1 SEE ALSO
 

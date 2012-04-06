@@ -254,7 +254,7 @@ Net::Google::DataAPI::Role::Service - provides base functionalities for Google D
 
 =head1 AUTHOR
 
-Nobuo Danjou E<lt>nobuo.danjou@gmail.comE<gt>
+Nobuo Danjou E<lt>danjou@soffritto.orgE<gt>
 
 =head1 SEE ALSO
 

@@ -176,7 +176,7 @@ See L<https://developers.google.com/accounts/docs/OAuth2> for details.
 
 =head1 AUTHOR
 
-Nobuo Danjou E<lt>nobuo.danjou@gmail.comE<gt>
+Nobuo Danjou E<lt>danjou@soffritto.orgE<gt>
 
 =head1 SEE ALSO
 
