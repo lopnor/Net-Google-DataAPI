@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.27    Fri Apr 06 22:10:00 2012
+        - official release (no changes except for the version number)
+
 0.26_2  Fri Apr 06 12:55:00 2012
         - change author address
 
