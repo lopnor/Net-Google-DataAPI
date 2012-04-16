@@ -29,6 +29,7 @@ Etag: "myetag"
     xmlns:gd='http://schemas.google.com/g/2005'
     xmlns:hoge='http://example.com/schemas#hoge'
     gd:etag='&quot;myetag&quot;'>
+    <link rel="next" href="http://example.com/myentry?title=query+title&amp;next=1" />
     <entry gd:etag='&quot;entryetag&quot;'>
         <id>http://example.com/myidurl</id>
         <hoge:fuga>http://example.com/myidurl</hoge:fuga>
@@ -53,6 +54,18 @@ END
     {
         ok my @e = $s->myentries({title => 'query title'});
         ok scalar @e;
+        isa_ok $e[0], 'MyService::MyEntry';
+        is $e[0]->child_feedurl, 'http://example.com/myentryfeed';
+        is $e[0]->src_child_feedurl, 'http://example.com/srcofcontent';
+        is $e[0]->atom_child_feedurl, 'http://example.com/myidurl';
+        is $e[0]->null_child_feedurl, '';
+    }
+    {
+        ok my $feed = $s->myentry_feed({title => 'query title'});
+        isa_ok $feed, 'XML::Atom::Feed';
+        ok my @links = $feed->links;
+        ok my ($next) = map {$_->href} grep {$_->rel eq 'next'} @links;
+        my @e = $s->myentries($feed);
         isa_ok $e[0], 'MyService::MyEntry';
         is $e[0]->child_feedurl, 'http://example.com/myentryfeed';
         is $e[0]->src_child_feedurl, 'http://example.com/srcofcontent';

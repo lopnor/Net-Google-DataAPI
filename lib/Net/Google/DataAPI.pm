@@ -5,7 +5,7 @@ use Any::Moose '::Exporter';
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
-our $VERSION = '0.27';
+our $VERSION = '0.28';
 
 any_moose('::Exporter')->setup_import_methods(
     as_is => ['feedurl', 'entry_has'],
@@ -100,10 +100,15 @@ sub feedurl {
     $class_meta->add_method(
         $pl_name => sub {
             my ($self, $cond) = @_;
-            $self->$attr_name or confess "$attr_name is not set";
-            Any::Moose::load_class($entry_class);
-            $cond = $query_builder->($self, $cond);
-            my $feed = $self->service->get_feed($self->$attr_name, $cond);
+            my $feed = do {
+                if (ref($cond) eq 'XML::Atom::Feed') {
+                    $cond;
+                } else {
+                    $self->$attr_name or confess "$attr_name is not set";
+                    Any::Moose::load_class($entry_class);
+                    $self->can("${name}_feed")->($self, $cond);
+                }
+            };
             return map {
                 $entry_class->new(
                     $self->can('sync') ?
@@ -111,6 +116,14 @@ sub feedurl {
                     atom => $_,
                 )
             } $feed->entries;
+        }
+    );
+    $class_meta->add_method(
+        "${name}_feed" => sub {
+            my ($self, $cond) = @_;
+            $self->$attr_name or confess "$attr_name is not set";
+            $cond = $query_builder->($self, $cond);
+            return $self->service->get_feed($self->$attr_name, $cond);
         }
     );
     $class_meta->add_method(
