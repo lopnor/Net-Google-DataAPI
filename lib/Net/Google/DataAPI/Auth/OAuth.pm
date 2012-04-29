@@ -7,7 +7,7 @@ use LWP::UserAgent;
 use Net::OAuth;
 use URI;
 $Net::OAuth::PROTOCOL_VERSION = Net::OAuth::PROTOCOL_VERSION_1_0A;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 has [qw(consumer_key consumer_secret)] => ( is => 'ro', isa => 'Str', required => 1 );
 
@@ -153,7 +153,7 @@ __END__
 
 =head1 NAME
 
-Net::Google::DataAPI::Auth::OAuth - OAuth support for Google Data APIs
+Net::Google::DataAPI::Auth::OAuth - (DEPRECATED) OAuth 1.0 support for Google Data APIs
 
 =head1 SYNOPSIS
 
@@ -176,6 +176,11 @@ Net::Google::DataAPI::Auth::OAuth - OAuth support for Google Data APIs
 
 Net::Google::DataAPI::Auth::OAuth interacts with google OAuth service
 and adds Authorization header to given request.
+
+=head1 DEPRECATED!
+
+OAuth1.0 protocol is deprecated.
+Use L<Net::Google::DataAPI::Auth::OAuth2> instead.
 
 =head1 ATTRIBUTES
 
