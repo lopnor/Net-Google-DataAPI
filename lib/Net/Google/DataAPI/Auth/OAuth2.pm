@@ -40,7 +40,8 @@ has access_token => (is => 'rw', isa => 'Net::Google::DataAPI::Types::OAuth2::Ac
 sub authorize_url {
     my $self = shift;
     return $self->oauth2_webserver->authorize_url(
-        scope => join(' ', $self->scope)
+        scope => join(' ', $self->scope),
+        @_
     );
 }
 
