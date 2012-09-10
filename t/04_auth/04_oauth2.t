@@ -96,6 +96,30 @@ BEGIN {
 
 #    ok $oauth2->get_access_token('mycode');
 }
+{
+    ok my $oauth2 = Net::Google::DataAPI::Auth::OAuth2->new(
+        client_id => 'myclient.example.com',
+        client_secret => 'mysecret',
+        redirect_uri => 'https://example.com/callback',
+        scope => ['http://spreadsheets.google.com/feeds/'],
+    );
+    ok my $url = $oauth2->authorize_url(access_type => 'offline', approval_prompt => 'force');
+    $url = URI->new($url);
+    is $url->scheme, 'https';
+    is $url->host, 'accounts.google.com';
+    is $url->path, '/o/oauth2/auth';
+    is_deeply {$url->query_form}, {
+        client_id => 'myclient.example.com',
+        redirect_uri => 'https://example.com/callback',
+        response_type => 'code',
+        scope => 'http://spreadsheets.google.com/feeds/',
+        type => 'web_server',
+        access_type => 'offline',
+        approval_prompt => 'force',
+    } or note explain {$url->query_form};
+
+#    ok $oauth2->get_access_token('mycode');
+}
 
 
 done_testing;

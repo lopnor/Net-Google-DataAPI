@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.2802  Mon Sep 10 12:00:00 2012
+        - Support additional params in authorize_url() (thanks to @hsw, https://github.com/lopnor/Net-Google-DataAPI/pull/1)
+
 0.2801  Mon Apr 30 08:55:00 2012
         - Net::Google::DataAPI::Auth::OAuth is deprecated. (#76812)
 

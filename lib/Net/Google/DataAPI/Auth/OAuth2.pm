@@ -5,7 +5,7 @@ with 'Net::Google::DataAPI::Role::Auth';
 use Net::OAuth2::Client;
 use Net::OAuth2::Profile::WebServer;
 use HTTP::Request::Common;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 has [qw(client_id client_secret)] => (is => 'ro', isa => 'Str', required => 1);
 has redirect_uri => (is => 'ro', isa => 'Str', default => 'urn:ietf:wg:oauth:2.0:oob');
@@ -123,6 +123,13 @@ Net::Google::DataAPI::Auth::OAuth2 - OAuth2 support for Google Data APIs
 
   );
   my $url = $oauth2->authorize_url();
+
+  # you can add optional parameters:
+  #
+  #   my $url = $oauth2->authorize_url(
+  #     access_type => 'offline',
+  #     approval_prompt => 'force',
+  #   );
 
   # show the user $url and get $code
   # if you're making web app, you will do:
