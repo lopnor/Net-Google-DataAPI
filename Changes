@@ -1,5 +1,9 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.2802_1 Sun Jan 13 10:30:00 2013
+        - follow changes of Net::OAuth2 (thanks to @ediblenergy, https://github.com/lopnor/Net-Google-DataAPI/pull/3)
+        - bump up versions of dependencies
+
 0.2802  Mon Sep 10 12:00:00 2012
         - Support additional params in authorize_url() (thanks to @hsw, https://github.com/lopnor/Net-Google-DataAPI/pull/1)
 

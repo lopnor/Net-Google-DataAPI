@@ -5,7 +5,7 @@ with 'Net::Google::DataAPI::Role::Auth';
 use Net::OAuth2::Client;
 use Net::OAuth2::Profile::WebServer;
 use HTTP::Request::Common;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 has [qw(client_id client_secret)] => (is => 'ro', isa => 'Str', required => 1);
 has redirect_uri => (is => 'ro', isa => 'Str', default => 'urn:ietf:wg:oauth:2.0:oob');

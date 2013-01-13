@@ -3,11 +3,12 @@ name 'Net-Google-DataAPI';
 all_from 'lib/Net/Google/DataAPI.pm';
 
 requires 'Carp';
+requires 'XML::LibXML';
 requires 'XML::Atom';
 requires 'Net::Google::AuthSub' => '0.5';
 requires 'Digest::SHA1';
 requires 'Net::OAuth';
-requires 'Net::OAuth2' => '0.07';
+requires 'Net::OAuth2' => '0.51';
 requires 'LWP::UserAgent';
 requires 'LWP::Protocol::https';
 requires 'URI';
