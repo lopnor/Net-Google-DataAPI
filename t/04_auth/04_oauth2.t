@@ -6,7 +6,6 @@ use Test::Exception;
 use LWP::UserAgent;
 use URI;
 use JSON;
-
 BEGIN {
     use_ok 'Net::Google::DataAPI::Auth::OAuth2';
 }
@@ -34,7 +33,6 @@ BEGIN {
                 redirect_uri => 'urn:ietf:wg:oauth:2.0:oob',
                 client_secret => 'mysecret',
                 client_id => 'myclient.example.com',
-                type => 'web_server',
                 code => 'mycode',
             };
             my $res = HTTP::Response->new(200);
@@ -63,12 +61,11 @@ BEGIN {
         redirect_uri => 'urn:ietf:wg:oauth:2.0:oob',
         response_type => 'code',
         scope => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
-        type => 'web_server',
     } or note explain {$url->query_form};
 
     ok my $access_token = $oauth2->get_access_token('mycode');
     is $access_token->access_token, 'my_access_token';
-    is $access_token->{refresh_token}, 'my_refresh_token';
+    is $access_token->refresh_token, 'my_refresh_token';
     my $req = HTTP::Request->new('get' => 'http://foo.bar.com');
     ok $oauth2->sign_request($req);
     is $req->header('Authorization'), 'Bearer my_access_token';
@@ -91,7 +88,6 @@ BEGIN {
         redirect_uri => 'https://example.com/callback',
         response_type => 'code',
         scope => 'http://spreadsheets.google.com/feeds/',
-        type => 'web_server',
     } or note explain {$url->query_form};
 
 #    ok $oauth2->get_access_token('mycode');
@@ -113,7 +109,6 @@ BEGIN {
         redirect_uri => 'https://example.com/callback',
         response_type => 'code',
         scope => 'http://spreadsheets.google.com/feeds/',
-        type => 'web_server',
         access_type => 'offline',
         approval_prompt => 'force',
     } or note explain {$url->query_form};
