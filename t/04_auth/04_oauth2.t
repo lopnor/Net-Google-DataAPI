@@ -25,16 +25,28 @@ BEGIN {
 }
 {
     my $ua = Test::MockModule->new('LWP::UserAgent');
+    my $i = 0;
     $ua->mock(request => sub {
             my ($self, $req) = @_;
             is $req->method, 'POST';
-            is_deeply {URI->new('?'.$req->content)->query_form}, {
-                grant_type => 'authorization_code',
-                redirect_uri => 'urn:ietf:wg:oauth:2.0:oob',
-                client_secret => 'mysecret',
-                client_id => 'myclient.example.com',
-                code => 'mycode',
-            };
+            my $q = {URI->new('?'.$req->content)->query_form};
+            $i++;
+            if ($i == 1) {
+                is_deeply $q, {
+                    grant_type => 'authorization_code',
+                    redirect_uri => 'urn:ietf:wg:oauth:2.0:oob',
+                    client_secret => 'mysecret',
+                    client_id => 'myclient.example.com',
+                    code => 'mycode',
+                };
+            } else {
+                is_deeply $q, {
+                    grant_type => 'refresh_token',
+                    client_secret => 'mysecret',
+                    client_id => 'myclient.example.com',
+                    refresh_token => 'my_refresh_token',
+                };
+            }
             my $res = HTTP::Response->new(200);
             $res->header('Content-Type' => 'text/json');
             my $json = to_json({

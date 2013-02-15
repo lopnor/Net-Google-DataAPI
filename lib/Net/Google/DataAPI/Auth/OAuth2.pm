@@ -5,7 +5,7 @@ with 'Net::Google::DataAPI::Role::Auth';
 use Net::OAuth2::Client;
 use Net::OAuth2::Profile::WebServer;
 use HTTP::Request::Common;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 has [qw(client_id client_secret)] => (is => 'ro', isa => 'Str', required => 1);
 has redirect_uri => (is => 'ro', isa => 'Str', default => 'urn:ietf:wg:oauth:2.0:oob');
@@ -28,6 +28,7 @@ sub _build_oauth2_client {
         site => $self->site,
         authorize_path => $self->authorize_path,
         access_token_path => $self->access_token_path,
+        refresh_token_path => $self->access_token_path,
     );
 }
 has oauth2_webserver => (is => 'ro', isa => 'Net::OAuth2::Profile::WebServer', required => 1, lazy_build => 1);
@@ -53,34 +54,19 @@ sub get_access_token {
 
 sub refresh_token {
     my ($self, $refresh_token) = @_;
-    $refresh_token ||= $self->access_token->refresh_token;
-    my $res = $self->oauth2_client->request(
-        POST($self->oauth2_webserver->access_token_url,
-            {
-                refresh_token => $refresh_token,
-                grant_type => 'refresh_token',
-                client_id => $self->client_id,
-                client_secret => $self->client_secret,
-            }
-        )
-    );
-    $res->is_success or die 'refresh_token request failed';
-    my $res_params = Net::OAuth2::Profile::WebServer::_parse_json($res->content) 
-        or die 'parse_json for refresh_token response failed';
-    $self->access_token($res_params);
+    $self->oauth2_webserver->update_access_token($self->access_token);
+    $self->access_token->refresh;
 }
 
 sub userinfo {
     my $self = shift;
     my $at = $self->access_token or die 'access_token is required';
     my $url = URI->new($self->userinfo_url);
-    $url->query_form(access_token => $at->access_token);
-    my $req = $self->sign_request(GET($url));
-    my $res = $self->oauth2_client->request($req);
+    my $res = $at->get($url);
     $res->is_success or die 'userinfo request failed: '.$res->as_string;
-    my $res_params = Net::OAuth2::Profile::WebServer::_parse_json($res->content) 
-        or die 'parse_json for userinfo response failed';
-    return $res_params;
+    my %res_params = $self->oauth2_webserver->params_from_response($res)
+        or die 'params_from_response for userinfo response failed';
+    return \%res_params;
 }
 
 sub sign_request {
