@@ -13,6 +13,12 @@ our $VERSION = '0.04';
 $XML::Atom::ForceUnicode = 1;
 $XML::Atom::DefaultVersion = 1;
 
+# Make Net::HTTP not bail out on the connection if it doesn't receive
+# a newline in a timely fashion.
+my %OPTS = @LWP::Protocol::http::EXTRA_SOCK_OPTS;
+$OPTS{MaxLineLength} ||= 1024 * 1024; # default was perhaps 8192
+@LWP::Protocol::http::EXTRA_SOCK_OPTS = %OPTS;
+
 has gdata_version => (
     isa => 'Str',
     is => 'ro',
