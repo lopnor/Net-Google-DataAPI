@@ -1,6 +1,6 @@
 Revision history for Perl extension Net::Google::DataAPI
 
-0.2804  Sat Jun 28 15:30:00 2014
+0.2805  Sat Jun 28 17:30:00 2014
         - allow state parameter for Net::Google::DataAPI::Auth::OAuth2
 
 0.2804  Tue Mar 11 14:46:18 2014
