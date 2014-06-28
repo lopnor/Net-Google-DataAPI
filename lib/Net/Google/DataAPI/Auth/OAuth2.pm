@@ -5,7 +5,7 @@ with 'Net::Google::DataAPI::Role::Auth';
 use Net::OAuth2::Client;
 use Net::OAuth2::Profile::WebServer;
 use HTTP::Request::Common;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 has [qw(client_id client_secret)] => (is => 'ro', isa => 'Str', required => 1);
 has redirect_uri => (is => 'ro', isa => 'Str', default => 'urn:ietf:wg:oauth:2.0:oob');
@@ -15,6 +15,7 @@ has scope => (is => 'ro', isa => 'ArrayRef[Str]', required => 1, auto_deref => 1
         'https://www.googleapis.com/auth/userinfo.email'
     ]},
 );
+has state => (is => 'ro', isa => 'Str', default => '');
 has site => (is => 'ro', isa => 'Str', default => 'https://accounts.google.com');
 has authorize_path => (is => 'ro', isa => 'Str', default => '/o/oauth2/auth');
 has access_token_path => (is => 'ro', isa => 'Str', default => '/o/oauth2/token');
@@ -34,7 +35,10 @@ sub _build_oauth2_client {
 has oauth2_webserver => (is => 'ro', isa => 'Net::OAuth2::Profile::WebServer', required => 1, lazy_build => 1);
 sub _build_oauth2_webserver {
     my $self = shift;
-    $self->oauth2_client->web_server( redirect_uri => $self->redirect_uri );
+    $self->oauth2_client->web_server( 
+        redirect_uri => $self->redirect_uri,
+        state => $self->state,
+    );
 }
 has access_token => (is => 'rw', isa => 'Net::Google::DataAPI::Types::OAuth2::AccessToken', coerce => 1);
 

@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use lib 'lib';
 use Amon2::Lite;
+use Amon2::Util;
 use Net::Google::DataAPI::Auth::OAuth2;
 use Net::Google::Spreadsheets;
 
@@ -17,7 +18,7 @@ spreadsheets.psgi - sample web app using google spreadsheets with OAuth 2.0
 
 =head1 DEPENDENCY
 
-you need to have Amon2::Lite and Net::Google::Spreadsheets distributions in you box.
+you need to have Amon2::Lite and Net::Google::Spreadsheets distributions in your box.
 
 =head1 AUTHOR
 
@@ -25,16 +26,18 @@ Nobuo Danjou E<lt>nobuo.danjou@gmail.comE<gt>
 
 =head1 SEE ALSO
 
-http://code.google.com/intl/ja-JP/apis/accounts/docs/OAuth2.html
+https://developers.google.com/accounts/docs/OAuth2
 
 =cut
 
 sub oauth2 {
+    my $state = shift || '';
     Net::Google::DataAPI::Auth::OAuth2->new(
         client_id => $ENV{CLIENT_ID},
         client_secret => $ENV{CLIENT_SECRET},
         redirect_uri => 'http://localhost:5000/callback',
         scope => ['http://spreadsheets.google.com/feeds/'],
+        state => $state,
     );
 }
 
@@ -51,7 +54,9 @@ get '/' => sub {
 
 get '/login' => sub {
     my ($c) = @_;
-    $c->redirect(oauth2()->authorize_url());
+    my $state = Amon2::Util::random_string(30);
+    $c->session->set(state => $state);
+    $c->redirect(oauth2($state)->authorize_url());
 };
 
 get '/logout' => sub {
@@ -67,9 +72,13 @@ get '/callback' => sub {
     } 
     my $code = $c->req->param('code')
         or return $c->redirect($c->uri_for('/'));
+    my $state = $c->session->get('state')
+        or return $c->redirect($c->uri_for('/'));
+    $c->req->param('state') eq $state
+        or return $c->res_403;
     my $oauth2 = oauth2();
     my $at = $oauth2->get_access_token($code)
-        or $c->return_403;
+        or return $c->res_403;
     $c->session->set(token => $at);
     $c->redirect($c->uri_for('/'));
 };

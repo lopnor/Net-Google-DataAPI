@@ -8,7 +8,7 @@ requires 'XML::Atom';
 requires 'Net::Google::AuthSub' => '0.5';
 requires 'Digest::SHA1';
 requires 'Net::OAuth';
-requires 'Net::OAuth2' => '0.53';
+requires 'Net::OAuth2' => '0.60';
 requires 'LWP::UserAgent';
 requires 'LWP::Protocol::https';
 requires 'URI';

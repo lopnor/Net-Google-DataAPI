@@ -62,6 +62,7 @@ BEGIN {
     ok my $oauth2 = Net::Google::DataAPI::Auth::OAuth2->new(
         client_id => 'myclient.example.com',
         client_secret => 'mysecret',
+        state => '',
     );
     ok my $url = $oauth2->authorize_url;
     $url = URI->new($url);
@@ -73,6 +74,7 @@ BEGIN {
         redirect_uri => 'urn:ietf:wg:oauth:2.0:oob',
         response_type => 'code',
         scope => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
+        state => '',
     } or note explain {$url->query_form};
 
     ok my $access_token = $oauth2->get_access_token('mycode');
@@ -89,6 +91,7 @@ BEGIN {
         client_secret => 'mysecret',
         redirect_uri => 'https://example.com/callback',
         scope => ['http://spreadsheets.google.com/feeds/'],
+        state => 'hogehoge',
     );
     ok my $url = $oauth2->authorize_url;
     $url = URI->new($url);
@@ -100,6 +103,7 @@ BEGIN {
         redirect_uri => 'https://example.com/callback',
         response_type => 'code',
         scope => 'http://spreadsheets.google.com/feeds/',
+        state => 'hogehoge',
     } or note explain {$url->query_form};
 
 #    ok $oauth2->get_access_token('mycode');
@@ -110,6 +114,7 @@ BEGIN {
         client_secret => 'mysecret',
         redirect_uri => 'https://example.com/callback',
         scope => ['http://spreadsheets.google.com/feeds/'],
+        state => 'foobar',
     );
     ok my $url = $oauth2->authorize_url(access_type => 'offline', approval_prompt => 'force');
     $url = URI->new($url);
@@ -123,6 +128,7 @@ BEGIN {
         scope => 'http://spreadsheets.google.com/feeds/',
         access_type => 'offline',
         approval_prompt => 'force',
+        state => 'foobar',
     } or note explain {$url->query_form};
 
 #    ok $oauth2->get_access_token('mycode');
