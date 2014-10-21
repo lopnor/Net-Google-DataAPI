@@ -5,6 +5,7 @@ use Any::Moose '::Exporter';
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
+use Class::Load;
 our $VERSION = '0.2805';
 
 any_moose('::Exporter')->setup_import_methods(
@@ -76,7 +77,7 @@ sub feedurl {
             "add_$name" => sub {
                 my ($self, $args) = @_;
                 $self->$attr_name or confess "$attr_name is not set";
-                Any::Moose::load_class($entry_class);
+                Class::Load::load_class($entry_class);
                 $args = $arg_builder->($self, $args);
                 my %parent = 
                     $self->can('sync') ?
@@ -105,7 +106,7 @@ sub feedurl {
                     $cond;
                 } else {
                     $self->$attr_name or confess "$attr_name is not set";
-                    Any::Moose::load_class($entry_class);
+                    Class::Load::load_class($entry_class);
                     $self->can("${name}_feed")->($self, $cond);
                 }
             };

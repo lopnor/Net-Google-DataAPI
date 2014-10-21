@@ -14,6 +14,7 @@ requires 'LWP::Protocol::https';
 requires 'URI';
 requires 'Lingua::EN::Inflect::Number';
 requires 'Text::Glob';
+requires 'Class::Load';
 requires_any_moose(
     prefer => 'Mouse',
     moose => '0.56',
