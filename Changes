@@ -1,4 +1,6 @@
 Revision history for Perl extension Net::Google::DataAPI
+0.2806
+        - switch to Class::Load from deprecated Any::Moose::load_class
 
 0.2805  Sat Jun 28 17:30:00 2014
         - allow state parameter for Net::Google::DataAPI::Auth::OAuth2
