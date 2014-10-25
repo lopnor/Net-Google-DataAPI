@@ -111,7 +111,7 @@ Net::Google::DataAPI::Auth::OAuth2::SignedJWT - OAuth2 support for Server to Ser
       scope => ['http://spreadsheets.google.com/feeds/'],
   );
 
-  $oauth2->get_access_token oe die;
+  $oauth2->get_access_token or die;
 
   # after retrieving token, you can use $oauth2 with Net::Google::DataAPI items:
 
