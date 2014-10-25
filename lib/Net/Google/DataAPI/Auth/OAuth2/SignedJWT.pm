@@ -47,6 +47,8 @@ has access_token => (
     isa => 'Str',
 );
 
+# https://developers.google.com/accounts/docs/OAuth2ServiceAccount
+# https://github.com/comewalk/google-api-perl-client/blob/master/lib/Google/API/OAuth2/SignedJWT.pm
 sub get_access_token {
     my ($self) = @_;
 
@@ -71,6 +73,7 @@ sub get_access_token {
     my $json_response = JSON->new->utf8->decode($jwt_response->decoded_content);
     $self->token_type($json_response->{token_type});
     $self->access_token($json_response->{access_token});
+    return $self->access_token;
 }
 
 sub sign_request {
@@ -88,3 +91,70 @@ __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 
 1;
+__END__
+
+=head1 NAME
+
+Net::Google::DataAPI::Auth::OAuth2::SignedJWT - OAuth2 support for Server to Server Applications
+
+=head1 SYNOPSIS
+
+  use Net::Google::DataAPI::Auth::OAuth2::SignedJWT;
+
+  my $oauth2 = Net::Google::DataAPI::Auth::OAuth2->new(
+      private_key => <<'__KEY__',
+  -----BEGIN PRIVATE KEY-----
+  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  -----END PRIVATE KEY-----
+  __KEY__
+      service_account => 'xxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@developer.gserviceaccount.com',
+      scope => ['http://spreadsheets.google.com/feeds/'],
+  );
+
+  $oauth2->get_access_token oe die;
+
+  # after retrieving token, you can use $oauth2 with Net::Google::DataAPI items:
+
+  my $client = Net::Google::Spreadsheets->new(auth => $oauth2);
+
+=head1 DESCRIPTION
+
+Net::Google::DataAPI::Auth::OAuth2::SignedJWT interacts with google OAuth 2.0 service
+and adds Authorization header to given request.
+
+=head1 ATTRIBUTES
+
+You can make Net::Google::DataAPI::Auth::OAuth2::SignedJWT instance with those arguments below:
+
+=over 2
+
+=item * private_key
+
+private key of Crypt::OpenSSL::RSA. You can get it at L<https://code.google.com/apis/console#access>.
+
+=item * service_account
+
+E-mail address for service account.
+
+=item * scope
+
+URL identifying the service(s) to be accessed. You can see the list of the urls to use at L<http://code.google.com/intl/en-US/apis/gdata/faq.html#AuthScopes>
+
+=back
+
+See L<https://developers.google.com/accounts/docs/OAuth2ServiceAccount> for details.
+
+=head1 AUTHOR
+
+Ichinose Shogo E<lt>shogo82148@gmail.comE<gt>
+
+=head1 SEE ALSO
+
+L<https://developers.google.com/accounts/docs/OAuth2ServiceAccount>
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
