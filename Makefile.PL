@@ -19,6 +19,7 @@ requires_any_moose(
     moose => '0.56',
     mouse => '0.51',
 );
+requires 'JSON::WebToken';
 
 tests_recursive;
 author_tests 'xt';
