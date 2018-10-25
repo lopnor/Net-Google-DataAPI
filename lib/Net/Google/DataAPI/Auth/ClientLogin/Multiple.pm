@@ -1,5 +1,5 @@
 package Net::Google::DataAPI::Auth::ClientLogin::Multiple;
-use Any::Moose;
+use Moose;
 use Net::Google::AuthSub;
 use Text::Glob;
 with 'Net::Google::DataAPI::Role::Auth';
@@ -47,7 +47,7 @@ sub _get_auth_params {
 
 __PACKAGE__->meta->make_immutable;
 
-no Any::Moose;
+no Moose;
 
 1;
 __END__

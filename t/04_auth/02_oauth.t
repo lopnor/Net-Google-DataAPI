@@ -104,14 +104,14 @@ BEGIN {
 
     {
         $ua->mock('get' => sub { });
-        throws_ok { 
-            $oauth->get_request_token; 
+        throws_ok {
+            $oauth->get_request_token;
         } qr{request failed: no response returned};
     }
     {
         $ua->mock('get' => sub { HTTP::Response->new(400) });
-        throws_ok { 
-            $oauth->get_request_token; 
+        throws_ok {
+            $oauth->get_request_token;
         } qr{request failed: 400 Bad Request};
     }
     {
@@ -185,14 +185,14 @@ BEGIN {
 
     {
         $ua->mock('get' => sub { });
-        throws_ok { 
-            $oauth->get_request_token; 
+        throws_ok {
+            $oauth->get_request_token;
         } qr{request failed: no response returned};
     }
     {
         $ua->mock('get' => sub { HTTP::Response->new(400) });
-        throws_ok { 
-            $oauth->get_request_token; 
+        throws_ok {
+            $oauth->get_request_token;
         } qr{request failed: 400 Bad Request};
     }
     {

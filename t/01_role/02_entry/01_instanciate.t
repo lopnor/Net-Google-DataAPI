@@ -8,7 +8,7 @@ BEGIN {
 
 {
     package MyService;
-    use Any::Moose;
+    use Moose;
     with 'Net::Google::DataAPI::Role::Service' => {
         service => 'wise',
         source => __PACKAGE__,
@@ -16,7 +16,7 @@ BEGIN {
 }
 {
     package MyEntry;
-    use Any::Moose;
+    use Moose;
     with 'Net::Google::DataAPI::Role::Entry';
 }
 

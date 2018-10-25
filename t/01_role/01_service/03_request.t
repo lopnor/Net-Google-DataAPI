@@ -8,7 +8,7 @@ use HTTP::Response;
 
 {
     package MyService;
-    use Any::Moose;
+    use Moose;
     use Net::Google::AuthSub;
     use Net::Google::DataAPI::Auth::AuthSub;
     with 'Net::Google::DataAPI::Role::Service';
@@ -41,7 +41,7 @@ my $res = Test::MockObject->new;
 $res->mock(is_success => sub {1});
 my $authsub = Test::MockModule->new('Net::Google::AuthSub');
 $authsub->mock(login => sub {return $res});
-$authsub->mock(auth_params => sub {(Authorization => 'GoogleLogin ="MYAuth"')}); 
+$authsub->mock(auth_params => sub {(Authorization => 'GoogleLogin ="MYAuth"')});
 
 my $ua = Test::MockModule->new('LWP::UserAgent');
 my $ua_res = HTTP::Response->parse(<<END);
@@ -207,7 +207,7 @@ END
     is $res->content, "OK\n";
 }
 {
-    throws_ok { 
+    throws_ok {
         $s->request(
             {
                 uri => 'http://example.com/myentry',

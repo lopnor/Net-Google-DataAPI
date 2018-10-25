@@ -1,5 +1,5 @@
 package Net::Google::DataAPI::Auth::AuthSub;
-use Any::Moose;
+use Moose;
 with 'Net::Google::DataAPI::Role::Auth';
 use Net::Google::AuthSub;
 use URI;
@@ -20,6 +20,6 @@ sub sign_request {
 
 __PACKAGE__->meta->make_immutable;
 
-no Any::Moose;
+no Moose;
 
 1;

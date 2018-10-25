@@ -1,13 +1,14 @@
 package Net::Google::DataAPI;
 use 5.008001;
-use Any::Moose;
-use Any::Moose '::Exporter';
+use Moose;
+use Moose::Exporter;
 use Carp;
 use Lingua::EN::Inflect::Number qw(to_PL);
 use XML::Atom;
-our $VERSION = '0.2805';
+use Class::Load ':all';
+our $VERSION = '0.2806';
 
-any_moose('::Exporter')->setup_import_methods(
+Moose::Exporter->setup_import_methods(
     as_is => ['feedurl', 'entry_has'],
 );
 
@@ -16,7 +17,7 @@ sub feedurl {
 
     my $class = caller;
 
-    my $entry_class = delete $args{entry_class} 
+    my $entry_class = delete $args{entry_class}
         or confess 'entry_class not specified';
 
     my $can_add = delete $args{can_add};
@@ -41,7 +42,7 @@ sub feedurl {
 
     my $attr_name = "${name}_feedurl";
 
-    my $class_meta = any_moose('::Meta::Class')->initialize($class);
+    my $class_meta = Moose::Meta::Class->initialize($class);
     $class_meta->add_attribute(
         $attr_name => (
             isa => 'Str',
@@ -57,13 +58,13 @@ sub feedurl {
     $class_meta->add_method(
         "_build_$attr_name" => sub {
             my $self = shift;
-            return $rel ?  
+            return $rel ?
             [
             map { $_->href }
             grep { $_->rel eq $rel }
             $self->atom->link
             ]->[0] :
-            $as_content_src ? 
+            $as_content_src ?
             $self->atom->content->elem->getAttribute('src') :
             $from_atom ?
             $from_atom->($self, $self->atom) : $default;
@@ -76,9 +77,9 @@ sub feedurl {
             "add_$name" => sub {
                 my ($self, $args) = @_;
                 $self->$attr_name or confess "$attr_name is not set";
-                Any::Moose::load_class($entry_class);
+                load_class($entry_class);
                 $args = $arg_builder->($self, $args);
-                my %parent = 
+                my %parent =
                     $self->can('sync') ?
                     ( container => $self ) : ( service => $self );
                 my $entry = $entry_class->new(
@@ -105,7 +106,7 @@ sub feedurl {
                     $cond;
                 } else {
                     $self->$attr_name or confess "$attr_name is not set";
-                    Any::Moose::load_class($entry_class);
+                    load_class($entry_class);
                     $self->can("${name}_feed")->($self, $cond);
                 }
             };
@@ -139,8 +140,8 @@ sub entry_has {
     my ($name, %args) = @_;
 
     my $class = caller;
-    my $class_meta = any_moose('::Meta::Class')->initialize($class);
-    $class_meta->does_role('Net::Google::DataAPI::Role::Entry') 
+    my $class_meta = Moose::Meta::Class->initialize($class);
+    $class_meta->does_role('Net::Google::DataAPI::Role::Entry')
         or confess 'Net::Google::DataAPI::Role::Entry required to use entry_has';
 
     my $tagname = delete $args{tagname};
@@ -205,8 +206,7 @@ sub entry_has {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Any::Moose;
-no Any::Moose '::Exporter';
+no Moose;
 
 1;
 __END__
@@ -218,7 +218,7 @@ Net::Google::DataAPI - Base implementations for modules to negotiate with Google
 =head1 SYNOPSIS
 
   package MyService;
-  use Any::Moose;
+  use Moose;
   use Net::Google::DataAPI;
 
   with 'Net::Google::DataAPI::Role::Service';
@@ -252,7 +252,7 @@ Net::Google::DataAPI - Base implementations for modules to negotiate with Google
   1;
 
   package MyEntry;
-  use Any::Moose;
+  use Moose;
   use Net::Google::DataAPI;
   with 'Net::Google::DataAPI::Role::Entry';
 
@@ -269,13 +269,13 @@ Net::Google::DataAPI - Base implementations for modules to negotiate with Google
 
 =head1 DESCRIPTION
 
-Net::Google::DataAPI is base implementations for modules to negotiate with Google Data APIs. 
+Net::Google::DataAPI is base implementations for modules to negotiate with Google Data APIs.
 
 =head1 METHODS
 
 =head2 feedurl
 
-define a feed url. 
+define a feed url.
 
 =head2 entry_has
 

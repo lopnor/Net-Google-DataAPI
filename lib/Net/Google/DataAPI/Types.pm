@@ -1,6 +1,6 @@
 package Net::Google::DataAPI::Types;
-use Any::Moose;
-use Any::Moose '::Util::TypeConstraints';
+use Moose;
+use Moose::Util::TypeConstraints;
 use Net::Google::DataAPI::Auth::AuthSub;
 use Net::Google::AuthSub;
 use Net::OAuth2::AccessToken;
@@ -38,7 +38,6 @@ coerce 'Net::Google::DataAPI::Types::OAuth2::AccessToken'
 
 __PACKAGE__->meta->make_immutable;
 
-no Any::Moose;
-no Any::Moose '::Util::TypeConstraints';
+no Moose;
 
 1;

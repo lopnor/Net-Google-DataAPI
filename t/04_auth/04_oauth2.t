@@ -75,6 +75,7 @@ BEGIN {
         response_type => 'code',
         scope => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
         state => '',
+        hd => '',
     } or note explain {$url->query_form};
 
     ok my $access_token = $oauth2->get_access_token('mycode');
@@ -83,7 +84,7 @@ BEGIN {
     my $req = HTTP::Request->new('get' => 'http://foo.bar.com');
     ok $oauth2->sign_request($req);
     is $req->header('Authorization'), 'Bearer my_access_token';
-    
+
 }
 {
     ok my $oauth2 = Net::Google::DataAPI::Auth::OAuth2->new(
@@ -104,6 +105,7 @@ BEGIN {
         response_type => 'code',
         scope => 'http://spreadsheets.google.com/feeds/',
         state => 'hogehoge',
+        hd => '',
     } or note explain {$url->query_form};
 
 #    ok $oauth2->get_access_token('mycode');
@@ -129,6 +131,7 @@ BEGIN {
         access_type => 'offline',
         approval_prompt => 'force',
         state => 'foobar',
+        hd => '',
     } or note explain {$url->query_form};
 
 #    ok $oauth2->get_access_token('mycode');

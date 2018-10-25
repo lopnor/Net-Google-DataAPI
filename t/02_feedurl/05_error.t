@@ -7,7 +7,7 @@ use Test::MockModule;
 
 throws_ok {
     package MyService;
-    use Any::Moose;
+    use Moose;
     use Net::Google::DataAPI;
     with 'Net::Google::DataAPI::Role::Service' => {
         service => 'wise',
@@ -22,12 +22,12 @@ throws_ok {
 {
     {
         package MyEntry;
-        use Any::Moose;
+        use Moose;
         with 'Net::Google::DataAPI::Role::Entry';
     }
     {
         package MyService;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Service' => {
             service => 'wise',
@@ -45,7 +45,7 @@ throws_ok {
     );
     throws_ok {$s->add_myentry} qr{myentry_feedurl is not set};
     throws_ok {$s->myentry} qr{myentry_feedurl is not set};
-} 
+}
 
 #throws_ok {
 #    {
@@ -62,18 +62,18 @@ throws_ok {
 # {
 #     {
 #         package Bar;
-#         use Any::Moose;
+#         use Moose;
 #     }
 #     throws_ok {
 #         {
 #             package MyService;
-#             use Any::Moose;
+#             use Moose;
 #             use Net::Google::DataAPI;
 # #            with 'Net::Google::DataAPI::Role::Service' => {
 # #                service => 'wise',
 # #                source => __PACKAGE__
 # #            };
-# 
+#
 #             feedurl 'foo' => (
 #                 entry_class => 'Bar',
 #                 default => 'http://example.com/bar',
