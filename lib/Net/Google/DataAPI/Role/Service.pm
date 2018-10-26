@@ -1,5 +1,5 @@
 package Net::Google::DataAPI::Role::Service;
-use Any::Moose '::Role';
+use Moose::Role;
 use Carp;
 use LWP::UserAgent;
 use URI;
@@ -101,8 +101,8 @@ sub request {
     }
     if ($@ || $res->is_error) {
         confess sprintf(
-            "request for '%s' failed:\n\t%s\n\t%s\n\t", 
-            $uri, 
+            "request for '%s' failed:\n\t%s\n\t%s\n\t",
+            $uri,
             ($res ? $res->status_line : $@),
             ($res ? $res->content : $!),
         );
@@ -112,14 +112,14 @@ sub request {
         if ($res->content_length && $type !~ m{^application/atom\+xml}) {
             confess sprintf(
                 "Content-Type of response for '%s' is not 'application/atom+xml':  %s",
-                $uri, 
+                $uri,
                 $type
             );
         }
         my $obj = eval {$res_obj->new(\($res->content))};
         confess sprintf(
-            "response for '%s' is broken: %s", 
-            $uri, 
+            "response for '%s' is broken: %s",
+            $uri,
             $@
         ) if $@;
         return $obj;
@@ -138,7 +138,7 @@ sub prepare_request {
     my @existing_query = $uri->query_form;
     $uri->query_form(
         {
-            @existing_query, 
+            @existing_query,
             %{$args->{query}}
         }
     ) if $args->{query};
@@ -146,7 +146,7 @@ sub prepare_request {
     if (my $parts = $args->{parts}) {
         $req->header('Content-Type' => 'multipart/related');
         for my $part (@$parts) {
-            ref $part eq 'HTTP::Message' 
+            ref $part eq 'HTTP::Message'
                 or confess "part argument should be a HTTP::Message object";
             $req->add_part($part);
         }
@@ -222,7 +222,7 @@ sub delete {
     return $res;
 }
 
-no Any::Moose '::Role';
+no Moose::Role;
 
 1;
 
@@ -232,12 +232,12 @@ __END__
 
 =head1 NAME
 
-Net::Google::DataAPI::Role::Service - provides base functionalities for Google Data API service 
+Net::Google::DataAPI::Role::Service - provides base functionalities for Google Data API service
 
 =head1 SYNOPSIS
 
     package MyService;
-    use Any::Moose;
+    use Moose;
     use Net::Google::DataAPI;
     with 'Net::Google::DataAPI::Role::Service' => {
         service => 'wise',

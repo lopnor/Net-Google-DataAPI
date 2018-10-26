@@ -1,5 +1,8 @@
 Revision history for Perl extension Net::Google::DataAPI
 
+0.2806  Thu Oct 25 11:49:00 2018
+        - Convert from Any::Moose to Moose, remove trailing spaces.
+
 0.2805  Sat Jun 28 17:30:00 2014
         - allow state parameter for Net::Google::DataAPI::Auth::OAuth2
 
@@ -69,7 +72,7 @@ Revision history for Perl extension Net::Google::DataAPI
 
 0.19    Mon Jun 07 12:27:00 2010
 
-        - make 'lazy_build' the content property of Role::HasContent 
+        - make 'lazy_build' the content property of Role::HasContent
 
 0.18    Sun May 16 10:08:00 2010
 

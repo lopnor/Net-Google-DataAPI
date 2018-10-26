@@ -1,5 +1,5 @@
 package Net::Google::DataAPI::Auth::OAuth2;
-use Any::Moose;
+use Moose;
 use Net::Google::DataAPI::Types;
 with 'Net::Google::DataAPI::Role::Auth';
 use Net::OAuth2::Client;
@@ -11,7 +11,7 @@ has [qw(client_id client_secret)] => (is => 'ro', isa => 'Str', required => 1);
 has redirect_uri => (is => 'ro', isa => 'Str', default => 'urn:ietf:wg:oauth:2.0:oob');
 has scope => (is => 'ro', isa => 'ArrayRef[Str]', required => 1, auto_deref => 1,
     default => sub {[
-        'https://www.googleapis.com/auth/userinfo.profile', 
+        'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/userinfo.email'
     ]},
 );
@@ -35,7 +35,7 @@ sub _build_oauth2_client {
 has oauth2_webserver => (is => 'ro', isa => 'Net::OAuth2::Profile::WebServer', required => 1, lazy_build => 1);
 sub _build_oauth2_webserver {
     my $self = shift;
-    $self->oauth2_client->web_server( 
+    $self->oauth2_client->web_server(
         redirect_uri => $self->redirect_uri,
         state => $self->state,
     );
@@ -89,7 +89,7 @@ sub sign_request {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Any::Moose;
+no Moose;
 
 1;
 __END__
@@ -180,7 +180,7 @@ Nobuo Danjou E<lt>danjou@soffritto.orgE<gt>
 
 L<Net::OAuth2>
 
-L<https://developers.google.com/accounts/docs/OAuth2> 
+L<https://developers.google.com/accounts/docs/OAuth2>
 
 you can see sample implementations for oauth2 client both as installed and web app in the eg directory of this distribution.
 

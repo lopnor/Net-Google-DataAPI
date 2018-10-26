@@ -1,5 +1,5 @@
 package Net::Google::DataAPI::Auth::OAuth;
-use Any::Moose;
+use Moose;
 use Net::Google::DataAPI::Types;
 with 'Net::Google::DataAPI::Role::Auth';
 use Digest::SHA1;
@@ -12,17 +12,17 @@ our $VERSION = '0.05';
 has [qw(consumer_key consumer_secret)] => ( is => 'ro', isa => 'Str', required => 1 );
 
 for my $attr (qw(
-    request_token 
+    request_token
     request_token_secret
-    access_token 
+    access_token
     access_token_secret
-)) { 
-    has $attr => ( 
-        is => 'rw', 
-        isa => 'Str', 
-        clearer => "clear_$attr", 
-        predicate => "has_$attr" 
-    ); 
+)) {
+    has $attr => (
+        is => 'rw',
+        isa => 'Str',
+        clearer => "clear_$attr",
+        predicate => "has_$attr"
+    );
 }
 
 has scope => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1, auto_deref => 1 );
@@ -32,7 +32,7 @@ has authorize_token_hd => ( is => 'ro', isa => 'Str', default => 'default' );
 has authorize_token_hl => ( is => 'ro', isa => 'Str', default => 'en' );
 has mobile => ( is => 'ro', isa => 'Bool', default => 0 );
 has ua => ( is => 'ro', isa => 'LWP::UserAgent', required => 1, lazy_build => 1 );
-sub _build_ua { 
+sub _build_ua {
     LWP::UserAgent->new( max_redirect => 0 );
 }
 
@@ -50,7 +50,7 @@ sub get_request_token {
     my ($self, $args) = @_;
     my $res = $self->_oauth_request(
         'request token',
-        { 
+        {
             request_url => $self->get_request_token_url,
             extra_params => {
                 scope => join(' ', $self->scope),
@@ -146,7 +146,7 @@ sub sign_request {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Any::Moose;
+no Moose;
 
 1;
 __END__

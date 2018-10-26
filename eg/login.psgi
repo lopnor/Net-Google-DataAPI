@@ -57,7 +57,7 @@ get '/callback' => sub {
     my ($c) = @_;
     if ($c->req->param('error')) {
         return $c->render('error.tt');
-    } 
+    }
     my $code = $c->req->param('code')
         or return $c->redirect($c->uri_for('/'));
     my $oauth2 = oauth2();

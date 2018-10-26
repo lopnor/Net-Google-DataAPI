@@ -1,5 +1,5 @@
 [TestingAndDebugging::ProhibitNoStrict]
-allow=refs
+allow = refs
 
 [TestingAndDebugging::RequireUseStrict]
-equivalent_modules = Any::Moose
+equivalent_modules = Moose

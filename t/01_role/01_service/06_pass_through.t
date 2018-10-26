@@ -14,7 +14,7 @@ BEGIN {
 
 {
     package MyService;
-    use Any::Moose;
+    use Moose;
     with 'Net::Google::DataAPI::Role::Service';
 }
 

@@ -52,7 +52,7 @@ Etag: "myetag"
 END
         }
     );
-    
+
     ok my $e = $s->add_myentry(
         {
             title => 'my title'

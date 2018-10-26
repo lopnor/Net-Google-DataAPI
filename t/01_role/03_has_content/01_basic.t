@@ -8,7 +8,7 @@ BEGIN {
 
 {
     package Foo;
-    use Any::Moose;
+    use Moose;
     with 'Net::Google::DataAPI::Role::HasContent';
 
     sub update { }

@@ -1,5 +1,5 @@
 package Net::Google::DataAPI::Role::Entry;
-use Any::Moose '::Role';
+use Moose::Role;
 use Carp;
 use XML::Atom;
 use XML::Atom::Entry;
@@ -133,7 +133,7 @@ sub delete {
     return $res->is_success;
 }
 
-no Any::Moose '::Role';
+no Moose::Role;
 
 1;
 
@@ -148,7 +148,7 @@ Net::Google::DataAPI::Role::Entry - represents entry of Google Data API
 =head1 SYNOPSIS
 
     package MyEntry;
-    use Any::Moose;
+    use Moose;
     use Net::Google::DataAPI;
     with 'Net::Google::DataAPI::Role::Entry';
 

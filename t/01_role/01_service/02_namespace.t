@@ -11,7 +11,7 @@ BEGIN {
 
 {
     package MyService;
-    use Any::Moose;
+    use Moose;
     with 'Net::Google::DataAPI::Role::Service';
     has '+source' => (default => __PACKAGE__);
     has '+namespaces' => (

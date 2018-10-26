@@ -1,5 +1,5 @@
 package Net::Google::DataAPI::Role::HasContent;
-use Any::Moose '::Role';
+use Moose::Role;
 our $VERSION='0.03';
 
 requires 'update';
@@ -28,7 +28,7 @@ sub param {
     }
 }
 
-no Any::Moose '::Role';
+no Moose::Role;
 
 1;
 
@@ -43,7 +43,7 @@ Net::Google::DataAPI::Role::HasContent - provides 'param' method to Entry
 =head1 SYNOPSIS
 
     package MyEntry;
-    use Any::Moose;
+    use Moose;
     with qw(
         Net::Google::DataAPI::Role::Entry
         Net::Google::DataAPI::Role::HasContent

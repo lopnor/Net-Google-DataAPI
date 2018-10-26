@@ -7,7 +7,7 @@ use HTTP::Response;
 
 {
     package MyEntry;
-    use Any::Moose;
+    use Moose;
     use Net::Google::DataAPI;
     with 'Net::Google::DataAPI::Role::Entry';
     use XML::Atom::Util qw(textValue);
@@ -37,7 +37,7 @@ use HTTP::Response;
 }
 {
     package MyService;
-    use Any::Moose;
+    use Moose;
     use Net::Google::DataAPI;
     with 'Net::Google::DataAPI::Role::Service';
 
@@ -65,7 +65,7 @@ my $e;
     gd:etag='&quot;myetag&quot;'>
     <link rel="edit" href="http://example.com/myentry" />
     <link rel="self" href="http://example.com/myentry" />
-    <link rel="http://example.com/schema#child" 
+    <link rel="http://example.com/schema#child"
         href="http://example.com/myentry/child" />
     <foobar:myattr>hgoehgoe</foobar:myattr>
     <title>test entry</title>
@@ -102,7 +102,7 @@ END
     gd:etag='&quot;myetag_updated&quot;'>
     <link rel="edit" href="http://example.com/myentry" />
     <link rel="self" href="http://example.com/myentry" />
-    <link rel="http://example.com/schema#child" 
+    <link rel="http://example.com/schema#child"
         href="http://example.com/myentry/child" />
     <foobar:myattr>foobar</foobar:myattr>
     <title>test entry</title>
@@ -129,7 +129,7 @@ END
     gd:etag='&quot;myetag2&quot;'>
     <link rel="edit" href="http://example.com/myentry2" />
     <link rel="self" href="http://example.com/myentry2" />
-    <link rel="http://example.com/schema#child" 
+    <link rel="http://example.com/schema#child"
         href="http://example.com/myentry2/child" />
     <title>test entry</title>
 </entry>
@@ -144,7 +144,7 @@ END
     gd:etag='&quot;myetag_updated_again&quot;'>
     <link rel="edit" href="http://example.com/myentry" />
     <link rel="self" href="http://example.com/myentry" />
-    <link rel="http://example.com/schema#child" 
+    <link rel="http://example.com/schema#child"
         href="http://example.com/myentry/child" />
     <foobar:myattr>foobar</foobar:myattr>
     <title>test entry</title>
@@ -175,7 +175,7 @@ END
     gd:etag='&quot;myetag2_updated&quot;'>
     <link rel="edit" href="http://example.com/myentry2" />
     <link rel="self" href="http://example.com/myentry2" />
-    <link rel="http://example.com/schema#child" 
+    <link rel="http://example.com/schema#child"
         href="http://example.com/myentry2/child" />
     <title>hogehoge</title>
 </entry>
@@ -190,7 +190,7 @@ END
     gd:etag='&quot;myetag_updated_once_more&quot;'>
     <link rel="edit" href="http://example.com/myentry" />
     <link rel="self" href="http://example.com/myentry" />
-    <link rel="http://example.com/schema#child" 
+    <link rel="http://example.com/schema#child"
         href="http://example.com/myentry/child" />
     <foobar:myattr>foobar</foobar:myattr>
     <title>test entry</title>
@@ -235,7 +235,7 @@ END
     gd:etag='&quot;myetag_updated_once_more_again&quot;'>
     <link rel="edit" href="http://example.com/myentry" />
     <link rel="self" href="http://example.com/myentry" />
-    <link rel="http://example.com/schema#child" 
+    <link rel="http://example.com/schema#child"
         href="http://example.com/myentry/child" />
     <foobar:myattr>foobar</foobar:myattr>
     <title>test entry</title>

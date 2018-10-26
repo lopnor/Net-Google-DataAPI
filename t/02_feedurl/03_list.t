@@ -50,7 +50,7 @@ Etag: "myetag"
 END
         }
     );
-    
+
     {
         ok my @e = $s->myentries({title => 'query title'});
         ok scalar @e;
@@ -169,7 +169,7 @@ Etag: "myetag"
 END
         }
     );
-    
+
     {
         ok my @e = $s->myentries;
         is scalar @e, 2;

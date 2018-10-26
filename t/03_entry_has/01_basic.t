@@ -113,7 +113,7 @@ END
 {
     {
         package MyEntry;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Entry';
 
@@ -124,7 +124,7 @@ END
     }
     {
         package MyService;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Service';
 
@@ -147,7 +147,7 @@ END
 {
     {
         package MyEntry2;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Entry';
 
@@ -160,7 +160,7 @@ END
     }
     {
         package MyService2;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Service';
         has '+namespaces' => (
@@ -192,7 +192,7 @@ END
 {
     {
         package MyEntry3;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Entry';
 
@@ -211,7 +211,7 @@ END
     }
     {
         package MyService3;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Service';
         has '+namespaces' => (
@@ -257,7 +257,7 @@ END
 {
     {
         package MyEntry4;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Entry';
 
@@ -270,7 +270,7 @@ END
     }
     {
         package MyService4;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Service';
 
@@ -306,7 +306,7 @@ END
 {
     {
         package MyEntry5;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Entry';
 
@@ -320,7 +320,7 @@ END
     }
     {
         package MyService5;
-        use Any::Moose;
+        use Moose;
         use Net::Google::DataAPI;
         with 'Net::Google::DataAPI::Role::Service';
 

@@ -1,5 +1,5 @@
 package MyService::MyEntry;
-use Any::Moose;
+use Moose;
 use Net::Google::DataAPI;
 with 'Net::Google::DataAPI::Role::Entry';
 use XML::Atom::Util qw(textValue);
@@ -47,7 +47,7 @@ entry_has foobar => (
 
 __PACKAGE__->meta->make_immutable;
 
-no Any::Moose;
+no Moose;
 no Net::Google::DataAPI;
 
 1;

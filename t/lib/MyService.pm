@@ -1,10 +1,10 @@
 package MyService;
-use Any::Moose;
+use Moose;
 use Net::Google::DataAPI;
 with 'Net::Google::DataAPI::Role::Service';
 
 has '+namespaces' => (
-    default => sub { 
+    default => sub {
         +{
             hoge => 'http://example.com/schemas#hoge',
         }
@@ -24,7 +24,7 @@ feedurl fixed => (
 
 __PACKAGE__->meta->make_immutable;
 
-no Any::Moose;
+no Moose;
 no Net::Google::DataAPI;
 
 1;

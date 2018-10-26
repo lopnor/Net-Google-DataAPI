@@ -6,12 +6,12 @@ use HTTP::Response;
 
 {
     package MyEntry;
-    use Any::Moose;
+    use Moose;
     with 'Net::Google::DataAPI::Role::Entry';
 }
 {
     package MyService;
-    use Any::Moose;
+    use Moose;
     use Net::Google::DataAPI;
     with 'Net::Google::DataAPI::Role::Service';
 
