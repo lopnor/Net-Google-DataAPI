@@ -75,6 +75,7 @@ BEGIN {
         response_type => 'code',
         scope => 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
         state => '',
+        hd => '',
     } or note explain {$url->query_form};
 
     ok my $access_token = $oauth2->get_access_token('mycode');
@@ -104,6 +105,7 @@ BEGIN {
         response_type => 'code',
         scope => 'http://spreadsheets.google.com/feeds/',
         state => 'hogehoge',
+        hd => '',
     } or note explain {$url->query_form};
 
 #    ok $oauth2->get_access_token('mycode');
@@ -129,6 +131,7 @@ BEGIN {
         access_type => 'offline',
         approval_prompt => 'force',
         state => 'foobar',
+        hd => '',
     } or note explain {$url->query_form};
 
 #    ok $oauth2->get_access_token('mycode');
