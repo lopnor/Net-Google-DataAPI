@@ -2,6 +2,10 @@ use inc::Module::Install;
 name 'Net-Google-DataAPI';
 all_from 'lib/Net/Google/DataAPI.pm';
 
+configure_requires 'Module::Install::AuthorTests';
+configure_requires 'Module::Install::Repository';
+configure_requires 'Module::Install::Any::Moose';
+
 requires 'Carp';
 requires 'XML::LibXML';
 requires 'XML::Atom';
